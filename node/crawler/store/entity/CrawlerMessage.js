@@ -23,7 +23,7 @@ export default class CrawlerMessage {
    * @param content
    * @param instance
    */
-  constructor(type: string, instance: Crawler, content: string) {
+  constructor(type: string, instance: Crawler, content?: string = "") {
     if (!type) {
       throw "必须指定消息类型";
     }

@@ -1,12 +1,11 @@
 // @flow
+// 核心调度程序
 
-const EventEmitter = require("events");
-import SpiderMessage from "./entity/SpiderMessage";
-import CrawlerStatistics from "./entity/CrawlerStatistics";
-import CrawlerMessage from "./entity/CrawlerMessage";
-import Store from "./Store";
-
-class DeclarativeCrawlerEmitter extends EventEmitter {}
+import SpiderMessage from "./store/entity/SpiderMessage";
+import CrawlerStatistics from "./store/entity/CrawlerStatistics";
+import CrawlerMessage from "./store/entity/CrawlerMessage";
+import Store from "./store/Store";
+import DeclarativeCrawlerEmitter from "./store/DeclarativeCrawlerEmitter";
 
 const dcEmitter = new DeclarativeCrawlerEmitter();
 
@@ -14,6 +13,7 @@ const store = new Store();
 
 // 监听并且存储信息
 dcEmitter.on("Crawler", (crawlerMessage: CrawlerMessage) => {
+  // 获取当前爬虫名
   let crawlerName = crawlerMessage.instance.name;
 
   switch (crawlerMessage.type) {
@@ -37,7 +37,8 @@ dcEmitter.on("Crawler", (crawlerMessage: CrawlerMessage) => {
     // 爬虫出错
     case CrawlerMessage.ERROR:
       if (store.crawlerStatisticsMap[crawlerName]) {
-        store.crawlerStatisticsMap[crawlerName].lastError = crawlerMessage.content;
+        store.crawlerStatisticsMap[crawlerName].lastError =
+          crawlerMessage.content;
       }
       break;
 
@@ -56,7 +57,7 @@ dcEmitter.on("Crawler", (crawlerMessage: CrawlerMessage) => {
 dcEmitter.on("Spider", (spiderMessage: SpiderMessage) => {
   switch (spiderMessage.type) {
     case SpiderMessage.START_FETCH: {
-      // 将爬虫的执行次数加一
+      // 将蜘蛛的执行次数加一
       store.incrementSpiderCount(
         spiderMessage.instance,
         spiderMessage.time,
@@ -66,7 +67,7 @@ dcEmitter.on("Spider", (spiderMessage: SpiderMessage) => {
       break;
     }
     case SpiderMessage.LOG_EXECUTE_DURATION: {
-      // 更新平均执行时间
+      // 更新蜘蛛平均执行时间
       store.updateSpiderExecuteTime(
         spiderMessage.instance,
         spiderMessage.content,

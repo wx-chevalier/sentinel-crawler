@@ -1,5 +1,5 @@
 // @flow
-import Spider from "../../Spider";
+import Spider from "../../../spider/Spider";
 /**
  * @function 默认全局的状态存储
  */

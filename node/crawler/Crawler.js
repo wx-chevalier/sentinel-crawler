@@ -1,7 +1,7 @@
 // @flow
-import Spider from "./Spider.js";
-import { dcEmitter } from "./monitor/DeclarativeCrawlerEmitter";
-import SpiderMessage from "./monitor/entity/SpiderMessage";
+import Spider from "../spider/Spider.js";
+import SpiderMessage from "./store/entity/SpiderMessage";
+import { dcEmitter } from "./supervisor";
 
 export type RequestType = {
   // 请求地址
@@ -37,14 +37,18 @@ export default class Crawler {
 
   transforms: Array<Function> = [];
 
-  requests: RequestType = [];
+  requests: Array<RequestType> = [];
 
   // 标志位，记录当前爬虫是否正在允许
   isRunning: boolean = false;
 
   // 标志位，记录当前爬虫是否被初始化
   get _isInitialized(): boolean {
-    return !!this.spiders && !!this.transforms && !!this.requests;
+    return (
+      !!this.spiders.length &&
+      !!this.transforms.length &&
+      !!this.requests.length
+    );
   }
 
   initialize() {}
@@ -53,7 +57,11 @@ export default class Crawler {
    * @function 待复写函数，设置当前的待处理的 URL 或者 Generator
    * @returns {Array}
    */
-  setRequests(requests) {
+  setRequests(requests: [RequestType]) {
+    if (!Array.isArray(requests)) {
+      throw new Error("请输入请求目标数组");
+    }
+
     requests && (this.requests = requests);
 
     return this;

@@ -1,8 +1,9 @@
 // @flow
 
 import Crawler from "./Crawler";
-import { dcEmitter } from "./monitor/DeclarativeCrawlerEmitter";
-import CrawlerMessage from "./monitor/entity/CrawlerMessage";
+import { dcEmitter, store } from "./supervisor";
+import CrawlerMessage from "./store/entity/CrawlerMessage";
+import Store from "./store/Store";
 
 // 爬虫策略项配置
 type ScheduleOptionType = {
@@ -15,8 +16,6 @@ type ScheduleOptionType = {
 export default class CrawlerScheduler {
   // 存放所有爬虫的信息
   crawlers: { [string]: Crawler } = {};
-
-  constructor() {}
 
   /**
    * @function 注册爬虫
@@ -60,7 +59,6 @@ export default class CrawlerScheduler {
       let crawler = this.crawlers[crawlerName];
       // 当爬虫尚未运行时运行该爬虫
       if (!crawler.isRunning) {
-
         // 发出消息提示爬虫已启动
         dcEmitter.emit(
           "Crawler",
@@ -68,7 +66,7 @@ export default class CrawlerScheduler {
         );
 
         try {
-          // 运行爬虫
+          // 运行单个爬虫
           await crawler.run();
 
           dcEmitter.emit(
@@ -87,4 +85,28 @@ export default class CrawlerScheduler {
       }
     }
   }
+}
+
+// 设置定时器，更新爬虫执行安排
+setInterval(() => {
+  updateSchedule(store);
+}, 1000);
+
+/**
+ * @function 更新当前 Store 中的爬虫执行信息
+ */
+function updateSchedule(store: Store) {}
+
+/**
+ * @function 定时执行爬虫
+ * @param day
+ * @param hour
+ * @param minute
+ * @param second
+ * @returns {function(*, *, *)}
+ */
+export function interval(day = 0, hour = 0, minute = 0, second = 0) {
+  return (target, key, descriptor) => {
+    return descriptor;
+  };
 }

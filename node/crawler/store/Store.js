@@ -1,7 +1,7 @@
 // @flow
 import { SpiderStatistics } from "./entity/SpiderStatistics";
 import Crawler from "../Crawler";
-import Spider from "../Spider";
+import Spider from "../../spider/Spider";
 import CrawlerStatistics from "./entity/CrawlerStatistics";
 
 export default class Store {
@@ -15,10 +15,19 @@ export default class Store {
    * @param crawler
    */
   incrementSpiderCount = (spider: Spider, time: Date, crawler: Crawler) => {
+    // 判断是否存在该爬虫的统计信息，不存在则创建
+    if (!crawler.name in this.crawlerStatisticsMap) {
+      this.crawlerStatisticsMap[crawler.name] = new CrawlerStatistics(crawler);
+    }
+
     // 取出爬虫统计信息
     let crawlerStatistics: CrawlerStatistics = this.crawlerStatisticsMap[
       crawler.name
     ];
+
+    if (!crawlerStatistics) {
+      return;
+    }
 
     let key = spider.name;
 
@@ -50,6 +59,10 @@ export default class Store {
       crawler.name
     ];
 
+    if (!crawlerStatistics) {
+      return;
+    }
+
     // 更新蜘蛛执行时间
     crawlerStatistics.spiderStatisticsList[spider.name].updateExecuteDuration(
       duration
@@ -75,7 +88,9 @@ export default class Store {
         isRunning: crawlerStatistics.isRunning,
         lastStartTime: crawlerStatistics.lastStartTime,
         lastFinishTime: crawlerStatistics.lastFinishTime,
-        lastError: crawlerStatistics.lastError ? JSON.parse(crawlerStatistics.lastError.message) : undefined
+        lastError: crawlerStatistics.lastError
+          ? JSON.parse(crawlerStatistics.lastError.message)
+          : undefined
       });
     }
 

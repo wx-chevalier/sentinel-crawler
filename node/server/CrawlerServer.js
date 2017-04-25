@@ -2,13 +2,15 @@
 
 const Koa = require("koa");
 const Router = require("koa-router");
-import { dcEmitter, store } from "../crawler/monitor/DeclarativeCrawlerEmitter";
-import CrawlerStatistics from "../crawler/monitor/entity/CrawlerStatistics";
-import CrawlerScheduler from "../crawler/CrawlerScheduler";
+import {
+  dcEmitter,
+  store
+} from "../node/crawler/store/DeclarativeCrawlerEmitter";
+import CrawlerStatistics from "../node/crawler/store/entity/CrawlerStatistics";
+import CrawlerScheduler from "../node/crawler/CrawlerScheduler";
 const pusage = require("pidusage");
 const os = require("os");
-// Unmonitor process
-// pusage.unmonitor(process.pid);
+
 const app = new Koa();
 
 const router = new Router();
@@ -51,6 +53,8 @@ export default class CrawlerServer {
   async run() {
     // 默认路由，返回当前爬虫数目与状态
     router.get("/", function(ctx, next) {
+      // store是DeclarativeCrawlerEmitter监听爬虫时存储的爬虫信息
+      // store.crawlers存储字段：name，displayName，isRunning，lastStartTime，lastFinishTime，lastError
       ctx.body = store.crawlers;
     });
 
@@ -65,10 +69,12 @@ export default class CrawlerServer {
       };
     });
 
+    // 返回爬虫目前状态
     router.get("/status", async (ctx, next) => {
       ctx.body = await getOSInfo();
     });
 
+    // 根据crawlerName返回爬虫信息
     router.get("/:crawlerName", function(ctx, next) {
       // 获取到路径参数
       const { crawlerName } = ctx.params;
@@ -81,6 +87,7 @@ export default class CrawlerServer {
           error: "NOT FOUND"
         };
       } else {
+        // spiders
         ctx.body = crawlerStatistics.spiders;
       }
     });
