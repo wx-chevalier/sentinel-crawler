@@ -414,3 +414,7 @@ countByTime: { [number]: number } = {};
 CrawlerServer 提供了 RESTful API 来返回当前爬虫的状态信息，我们可以利用 React 或者其他框架来快速搭建监控界面。
 
 ![](https://coding.net/u/hoteam/p/Cache/git/raw/master/2017/3/2/WX20170419-211515.png)
+
+## 异常处理
+
+对于所有的非受控异常，Let It Crash! 
