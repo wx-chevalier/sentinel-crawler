@@ -151,6 +151,10 @@ export default class Spider implements SpiderInterface {
     let rawData: any;
 
     try {
+      if (!this.url) {
+        throw new Error("请设置有效的 URL");
+      }
+
       // 执行数据抓取
       rawData = await this.fetch(this.url, this.option);
     } catch (e) {

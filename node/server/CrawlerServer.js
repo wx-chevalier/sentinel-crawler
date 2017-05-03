@@ -2,12 +2,10 @@
 
 const Koa = require("koa");
 const Router = require("koa-router");
-import {
-  dcEmitter,
-  store
-} from "../node/crawler/store/DeclarativeCrawlerEmitter";
-import CrawlerStatistics from "../node/crawler/store/entity/CrawlerStatistics";
-import CrawlerScheduler from "../node/crawler/CrawlerScheduler";
+import CrawlerStatistics
+  from "../../node/crawler/store/entity/CrawlerStatistics";
+import { dcEmitter, store } from "../crawler/supervisor";
+import CrawlerScheduler from "../../node/crawler/CrawlerScheduler";
 const pusage = require("pidusage");
 const os = require("os");
 
@@ -32,7 +30,7 @@ async function getOSInfo() {
 export default class CrawlerServer {
   crawlerScheduler: CrawlerScheduler;
 
-  httpOption;
+  httpOption: any;
 
   /**
    * @function 默认构造函数
@@ -41,9 +39,12 @@ export default class CrawlerServer {
    */
   constructor(
     crawlerScheduler: CrawlerScheduler,
-    httpOption = {
+    httpOption: {
+      host: string,
+      port: number
+    } = {
       host: "localhost",
-      port: "3001"
+      port: 3001
     }
   ) {
     crawlerScheduler && (this.crawlerScheduler = crawlerScheduler);
@@ -88,7 +89,10 @@ export default class CrawlerServer {
         };
       } else {
         // spiders
-        ctx.body = crawlerStatistics.spiders;
+        ctx.body = {
+          leftRequest: crawlerStatistics.instance._spiderTasks.length,
+          spiders: crawlerStatistics.spiders
+        };
       }
     });
 

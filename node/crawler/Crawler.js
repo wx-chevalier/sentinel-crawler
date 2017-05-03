@@ -11,6 +11,8 @@ export type RequestType = {
   option: { [string]: any }
 };
 
+export type Transformer = (dataFromPreviousSpider: any) => {};
+
 export type SpiderTask = {
   // 当前执行任务的蜘蛛实例
   spiderInstance: Spider,
@@ -19,7 +21,7 @@ export type SpiderTask = {
   request: RequestType,
 
   // 当前蜘蛛对应的转换
-  transformer?: Function,
+  transformer?: Transformer,
 
   // 当前蜘蛛对应的下一个蜘蛛
   nextSpiderInstance?: Spider
@@ -35,12 +37,18 @@ export default class Crawler {
   // 存放所有的爬虫信息
   spiders: Array<Spider> = [];
 
-  transforms: Array<Function> = [];
+  transforms: Array<Transformer> = [];
 
+  // 初始请求列表
   requests: Array<RequestType> = [];
+
+  // 所有请求的历史记录
 
   // 标志位，记录当前爬虫是否正在允许
   isRunning: boolean = false;
+
+  // 存放内部的所有蜘蛛任务
+  _spiderTasks:[SpiderTask] = [];
 
   // 标志位，记录当前爬虫是否被初始化
   get _isInitialized(): boolean {
@@ -58,8 +66,12 @@ export default class Crawler {
    * @returns {Array}
    */
   setRequests(requests: [RequestType]) {
-    if (!Array.isArray(requests)) {
+    if (!Array.isArray(requests) || requests.length === 0) {
       throw new Error("请输入请求目标数组");
+    }
+
+    if (!requests[0].url) {
+      throw new Error("请输入有效的请求类型：RequestType");
     }
 
     requests && (this.requests = requests);
@@ -81,7 +93,12 @@ export default class Crawler {
     return this;
   }
 
-  transform(transformer: Function): Crawler {
+  /**
+   * @function 添加转换函数
+   * @param transformer
+   * @returns {Crawler}
+   */
+  transform(transformer: Transformer): Crawler {
     this.transforms.push(transformer);
     return this;
   }
@@ -108,7 +125,7 @@ export default class Crawler {
       throw new Error("请至少设置一个爬虫实例与一个请求！");
     }
 
-    let spiderTasks = this.requests.map(request => {
+    this._spiderTasks = this.requests.map(request => {
       return {
         spiderInstance: this.spiders[0],
         request,
@@ -119,9 +136,9 @@ export default class Crawler {
 
     this.isRunning = true;
 
-    while (spiderTasks.length > 0) {
+    while (this._spiderTasks.length > 0) {
       // 取出某个任务实例
-      let spiderTask = spiderTasks.shift();
+      let spiderTask = this._spiderTasks.shift();
 
       // 设置爬虫的请求
       spiderTask.spiderInstance.setRequest(spiderTask.request.url);
@@ -131,6 +148,7 @@ export default class Crawler {
       // 执行当前任务
       let data = await spiderTask.spiderInstance.run(isPersist);
 
+      // 反馈爬虫执行时间信息
       dcEmitter.emit(
         "Spider",
         new SpiderMessage(
@@ -150,7 +168,14 @@ export default class Crawler {
 
         // 根据获取到的新请求来创建新的爬虫任务
         for (let request of newRequests) {
-          spiderTasks.push({
+          // 判断 request 是字符串还是 URL
+          if (typeof request === "string") {
+            request = {
+              url: request
+            };
+          }
+
+          this._spiderTasks.push({
             spiderInstance: spiderTask.nextSpiderInstance,
             request,
             transformer: this.transforms.length > index

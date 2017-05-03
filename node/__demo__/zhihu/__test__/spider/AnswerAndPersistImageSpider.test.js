@@ -11,9 +11,15 @@ let answerAndPersistImageSpider: AnswerAndPersistImageSpider = new AnswerAndPers
   .setChromeOption("120.55.83.19", null, 10 * 1000);
 
 test("抓取知乎某个问题中所有的图片", async done => {
-  let images = await answerAndPersistImageSpider.run(true);
+  let images = await answerAndPersistImageSpider.run(false);
 
   expect(images, "返回数据为列表并且长度大于10").to.have.length.above(2);
+
+  done();
+});
+
+test("抓取知乎某个问题中所有的图片并且保存", async done => {
+  let images = await answerAndPersistImageSpider.run(true);
 
   done();
 });

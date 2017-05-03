@@ -1,5 +1,6 @@
 // @flow
 const CDP = require("chrome-remote-interface");
+const fs = require("fs");
 
 CDP(
   {
@@ -11,26 +12,28 @@ CDP(
     const { Network, Page, Runtime, Input } = client;
     // setup handlers
     Network.requestWillBeSent(params => {
-      // console.log(params.request.url);
+      console.log(params.request.url);
     });
-    Input.synthesizeScrollGesture({
-      x: 0,
-      y: 0,
-      xDistance: 500,
-      repeatCount: 10
-    });
-    Page.loadEventFired(() => {
 
+    Page.loadEventFired(async () => {
+      // 执行页面下滚操作
+
+      await Input.synthesizeScrollGesture({
+        x: 0,
+        y: 0,
+        yDistance: -10000,
+        repeatCount: 10
+      });
 
       Runtime.evaluate({
         expression: "document.body.outerHTML"
       }).then(result => {
-        console.log(1);
+        // console.log(result.result.value);
         // client.close();
       });
     });
     // enable events then start!
-    Promise.all([Network.enable(), Page.enable()])
+    Promise.all([Network.enable(), Page.enable(), Runtime.enable()])
       .then(() => {
         return Page.navigate({
           url: "https://www.zhihu.com/question/29134042"

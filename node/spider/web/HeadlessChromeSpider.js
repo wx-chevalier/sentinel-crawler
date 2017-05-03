@@ -19,6 +19,7 @@ export default class HeadlessChromeSpider extends HTMLSpider {
 
   // 页面加载多少毫秒之后返回
   delay: number = 0;
+
   /**
    * @function 设置浏览器选项
    * @param host
@@ -41,6 +42,7 @@ export default class HeadlessChromeSpider extends HTMLSpider {
    * @returns {Promise}
    */
   @override async fetch(url: string, option: Object): Promise<any> {
+
     return new Promise(async (resolve, reject) => {
       // 设置抓取过时，最多 1 分钟
       setTimeout(() => {
@@ -58,36 +60,29 @@ export default class HeadlessChromeSpider extends HTMLSpider {
 
       CDP(
         {
-          host: "120.55.83.19",
-          port: "9222"
+          host: this.host,
+          port: this.port
         },
         client => {
           // 设置网络与页面处理句柄
-          const { Network, Page, Runtime, Input } = client;
+          const { Network, Page, Runtime } = client;
 
-          Promise.all([Network.enable(), Page.enable()])
+          Promise.all([Network.enable(), Page.enable(), Runtime.enable()])
             .then(() => {
               return Page.navigate({
                 url
               });
             })
             .catch(err => {
-              // console.error(err);
+              console.error(err);
               client.close();
             });
 
           Network.requestWillBeSent(params => {
-            console.log(params.request.url);
+            // console.log(params.request.url);
           });
 
           Page.loadEventFired(() => {
-            Input.synthesizeScrollGesture({
-              x: 0,
-              y: 0,
-              xDistance: 500,
-              repeatCount: 10
-            });
-
             setTimeout(() => {
               Runtime.evaluate({
                 expression: "document.body.outerHTML"

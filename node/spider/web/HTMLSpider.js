@@ -2,7 +2,7 @@
 import { override } from "core-decorators";
 import type { SpiderInterface } from "../Spider";
 import Spider from "../Spider";
-import execute from "../../../../fluent-fetcher/src/execute";
+import execute from "../../fluent-fetcher/src/execute";
 import { $ } from "../../utils/parser/HTMLParser";
 
 /**
@@ -77,6 +77,7 @@ export default class HTMLSpider extends Spider implements SpiderInterface {
         // 如果为数组则返回数组
         let elementsLength = $elementOrElements.length;
 
+        // 提取到的目标对象
         let $elementsObject = [];
 
         // 遍历所有提取到的一级元素
@@ -89,9 +90,7 @@ export default class HTMLSpider extends Spider implements SpiderInterface {
             if (model[key][subKey] === "self") {
               $elementsObject[subKey] = $element;
             } else {
-              elementObject[subKey] = $dom(
-                $element.find(model[key][subKey]).html()
-              );
+              elementObject[subKey] = $dom($element.find(model[key][subKey]));
             }
           }
 
@@ -108,7 +107,7 @@ export default class HTMLSpider extends Spider implements SpiderInterface {
             pageObject[key][subKey] = $dom($elementOrElements);
           } else {
             pageObject[key][subKey] = $dom(
-              $($elementOrElements).find(model[key][subKey])
+              $dom($elementOrElements).find(model[key][subKey])
             );
           }
         }
