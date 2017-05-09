@@ -1,5 +1,5 @@
 
-> [使用 declarative-crawler 爬取知乎美图](https://zhuanlan.zhihu.com/p/26691496) 是笔者对 [declarative-crawler](https://github.com/wxyyxc1992/declarative-crawler) 的具体实例讲解，从属于笔者的 [程序猿的数据科学与机器学习实战手册](https://parg.co/b4C)。
+> [使用 declarative-crawler 爬取知乎美图](https://zhuanlan.zhihu.com/p/26691789) 是笔者对 [declarative-crawler](https://github.com/wxyyxc1992/declarative-crawler) 的具体实例讲解，从属于笔者的 [程序猿的数据科学与机器学习实战手册](https://parg.co/b4C)。
 
 本部分源代码参考[这里](https://parg.co/bMS)，对于 declarative-crawler 的分层架构与设计理念可以参考笔者的前文 [基于 Node.js 的声明式可监控爬虫网络初探](https://zhuanlan.zhihu.com/p/26463840)。这里我们还是想以知乎简单的列表-详情页为例，讲解 declarative-crawler 的基本用法。首先我们来看下爬取的目标，譬如我们搜索美女或者其他主题，可以得到如下回答的列表页：
 
