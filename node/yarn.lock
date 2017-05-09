@@ -1157,6 +1157,10 @@ extsprintf@1.0.2:
   version "1.0.2"
   resolved "http://registry.npm.taobao.org/extsprintf/download/extsprintf-1.0.2.tgz#e1080e0658e300b06294990cc70e1502235fd550"
 
+fetch-jsonp@^1.0.6:
+  version "1.0.6"
+  resolved "http://registry.npm.taobao.org/fetch-jsonp/download/fetch-jsonp-1.0.6.tgz#8d2ae174ed14108292f025f43fa07d2078de6736"
+
 filename-regex@^2.0.0:
   version "2.0.1"
   resolved "http://registry.npm.taobao.org/filename-regex/download/filename-regex-2.0.1.tgz#c1c4b9bee3e09725ddb106b75c1e301fe2f18b26"
@@ -1183,6 +1187,15 @@ find-up@^2.1.0:
   resolved "http://registry.npm.taobao.org/find-up/download/find-up-2.1.0.tgz#45d1b7e506c717ddd482775a2b77920a3c0c57a7"
   dependencies:
     locate-path "^2.0.0"
+
+fluent-fetcher@0.2.1:
+  version "0.2.1"
+  resolved "http://registry.npm.taobao.org/fluent-fetcher/download/fluent-fetcher-0.2.1.tgz#6bfb3bc112c2e94c10450271572d337b195fb075"
+  dependencies:
+    es6-promise "^3.2.1"
+    fetch-jsonp "^1.0.6"
+    isomorphic-fetch "^2.2.1"
+    isomorphic-urlencode "0.0.9"
 
 for-in@^1.0.1:
   version "1.0.2"

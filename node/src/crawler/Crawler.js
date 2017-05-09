@@ -141,7 +141,7 @@ export default class Crawler {
       let spiderTask = this._spiderTasks.shift();
 
       // 设置爬虫的请求
-      spiderTask.spiderInstance.setRequest(spiderTask.request.url);
+      spiderTask.spiderInstance.setRequest(spiderTask.request.url,spiderTask.request.option);
 
       let startTime = new Date();
 

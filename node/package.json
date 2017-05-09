@@ -2,11 +2,16 @@
   "name": "declarative-crawler",
   "version": "0.0.1",
   "description": "Declarative and Observable Distributed Crawler For Web, RDB, OS, also can act as a Monitor or ETL for your system",
-  "scripts": {},
+  "scripts": {
+    "prepublish": "npm run build",
+    "build": "node_modules/babel-cli/bin/babel.js src --out-dir dist",
+    "test": "jest"
+  },
   "repository": {
     "type": "git",
     "url": "https://github.com/wxyyxc1992/declarative-crawler"
   },
+  "main": "dist/index.js",
   "keywords": [
     "fetch",
     "fluent",
@@ -21,6 +26,7 @@
     "chrome-remote-interface": "^0.20.0",
     "core-decorators": "^0.17.0",
     "es6-promise": "^3.2.1",
+    "fluent-fetcher": "0.2.1",
     "image-downloader": "^3.2.1",
     "isomorphic-fetch": "^2.2.1",
     "isomorphic-urlencode": "0.0.9",

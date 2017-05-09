@@ -1,8 +1,8 @@
 // @flow
 
-import Crawler from "../../../crawler/Crawler";
 import TopicSpider from "../spider/TopicSpider";
 import AnswerAndPersistImageSpider from "../spider/AnswerAndPersistImageSpider";
+import Crawler from "../../../src/crawler/Crawler";
 
 export default class BeautyTopicCrawler extends Crawler {
   // 初始化爬虫

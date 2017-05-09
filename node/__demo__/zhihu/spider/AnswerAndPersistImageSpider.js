@@ -1,8 +1,10 @@
 // @flow
 
-import HeadlessChromeSpider from "../../../spider/web/HeadlessChromeSpider";
-import { downloadPersistor } from "../../../utils/persist/DownloadPersistor";
-import { imageRegex } from "../../../utils/parser/regex";
+import HeadlessChromeSpider from "../../../src/spider/web/HeadlessChromeSpider";
+import {
+  downloadPersistor
+} from "../../../src/utils/persist/DownloadPersistor";
+import { imageRegex } from "../../../src/utils/parser/regex";
 
 /**
  * @function 专门用于爬取答案以及缓存的爬虫

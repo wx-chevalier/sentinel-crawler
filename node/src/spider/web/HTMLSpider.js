@@ -2,7 +2,7 @@
 import { override } from "core-decorators";
 import type { SpiderInterface } from "../Spider";
 import Spider from "../Spider";
-import execute from "../../fluent-fetcher/src/execute";
+import { execute } from "fluent-fetcher";
 import { $ } from "../../utils/parser/HTMLParser";
 
 /**
@@ -100,6 +100,8 @@ export default class HTMLSpider extends Spider implements SpiderInterface {
 
         pageObject[key] = $elementsObject;
       } else {
+        pageObject[key] = [];
+
         // 不为数组则返回单个值
         // 遍历所有的二级键
         for (let subKey of Object.keys(model[key])) {
