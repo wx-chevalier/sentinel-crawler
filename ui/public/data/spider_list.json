@@ -1,0 +1,20 @@
+[ 
+  {
+    "name": "UACrawler",
+    "displayName": "通用公告爬虫",
+    "isRunning": true,
+    "lastStartTime": "2017-04-19T06:41:55.407Z"
+  },
+  {
+    "name": "UACrawler",
+    "displayName": "通用公告爬虫",
+    "isRunning": true,
+    "lastStartTime": "2017-04-19T06:46:05.410Z",
+    "lastError": {
+      "spiderName": "UAListSpider",
+      "message": "抓取超时",
+      "url": "http://ggzy.njzwfw.gov.cn/njggzy/jsgc/001001/001001001/001001001001?Paging=1",
+      "time": "2017-04-19T06:47:05.414Z"
+    }
+  }
+]

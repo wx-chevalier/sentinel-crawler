@@ -1,9 +1,13 @@
-import React from 'react';
-import ReactDOM from 'react-dom';
-import App from './App';
-import './index.css';
+import React from "react";
+import { Provider } from "mobx-react";
+import stores from "./stores/Stores";
+import App from "./App";
+import { clientRender } from "../dev-config/wrapper/render";
 
-ReactDOM.render(
-  <App />,
-  document.getElementById('root')
+clientRender(
+  <Provider {...stores}>
+    <App />
+  </Provider>,
+  document.getElementById("root"),
+  "./App"
 );

@@ -1,6 +1,6 @@
 {
   "name": "declarative-crawler",
-  "version": "0.0.1",
+  "version": "0.0.2",
   "description": "Declarative and Observable Distributed Crawler For Web, RDB, OS, also can act as a Monitor or ETL for your system",
   "scripts": {
     "prepublish": "npm run build",
