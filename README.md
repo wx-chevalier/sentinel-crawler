@@ -1,4 +1,6 @@
 
+# declarative-crawler
+
 declarative-crawler 是遵循声明式、可监测理念的分布式爬虫，其计划提供 Node.js 与 Go 两种实现，能够对于静态 Web 页面、动态 Web 页面、关系型数据库、操作系统等异构多源数据进行抓取。declarative-crawler 希望让使用者专注于领域逻辑而不用考虑调度、监控等问题，并且稍加改造就能用于系统监控、ETL 数据迁移等领域。更多的 declarative-crawler 设计思想、设计规范参考下述文章：
 - [浅论复杂智能爬虫的挑战与设计](./docs/Crawler.md)
 - [declarative-crawler 设计思想与原则](./docs/Design.md)
@@ -13,7 +15,6 @@ declarative-crawler 是遵循声明式、可监测理念的分布式爬虫，其
 # 简单列表与详情页爬取
 
 ## 声明抓取单个页面的蜘蛛
-
 
 我们以抓取某个在线[列表](http://ggzy.njzwfw.gov.cn/njggzy/jsgc/001001/001001001/001001001001/?Paging=1)与[详情页](http://ggzy.njzwfw.gov.cn/njggzy/infodetail/?infoid=2b69e958-5542-4d83-b7b9-e259c2037153&categoryNum=001001001001)为例，首先我们需要针对两个页面构建蜘蛛，注意，每个蜘蛛负责针对某个 URL 进行抓取与解析，用户应该首先编写列表爬虫，其需要声明 model 属性、复写 before_extract、parse 与 persist 方法，各个方法会被串行调用。另一个需要注意的是，我们爬虫可能会外部传入一些配置信息，统一的声明在了 extra 属性内，这样在持久化时也能用到。
 ```
@@ -199,7 +200,6 @@ export default class UACrawler extends Crawler {
 
 ## 将爬虫注册到调度器
 
-
 定义完 Crawler 之后，我们可以通过将爬虫注册到 CrawlerScheduler 来运行爬虫：
 ```
 const crawlerScheduler: CrawlerScheduler = new CrawlerScheduler();
@@ -259,13 +259,4 @@ new CrawlerServer(crawlerScheduler).run().then(()=>{},(error)=>{console.log(erro
 此时会启动框架内置的 Koa 服务器，允许用户通过 RESTful 接口来控制爬虫网络与获取当前状态。CrawlerServer 提供了 RESTful API 来返回当前爬虫的状态信息，我们可以利用 React 或者其他框架来快速搭建监控界面。
 
 ![](https://coding.net/u/hoteam/p/Cache/git/raw/master/2017/3/2/WX20170419-211515.png)
-
-
-# 使用 declarative-crawler 抓取 Hacker News 列表与评论
-
-# 使用 declarative-crawler 抓取知乎动态美女图片
-
-# 使用 declarative-crawler 监控系统运行状态
-
-# 使用 declarative-crawler 作为 ETL 数据迁移工具
 

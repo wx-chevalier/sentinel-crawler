@@ -1,8 +1,8 @@
 import React from "react";
 import { Provider } from "mobx-react";
-import stores from "./stores/Stores";
+import stores from "./store/stores";
 import App from "./App";
-import { clientRender } from "../dev-config/wrapper/render";
+import { clientRender } from "../dev-config/tool/render";
 
 clientRender(
   <Provider {...stores}>

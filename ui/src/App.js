@@ -4,10 +4,10 @@
 import React, { Component } from "react";
 import data from "./api/mock";
 import "./App.css";
-import "antd/dist/antd.css";
-import {BrowserRouter, Route} from 'react-router-dom'
-import Home from './home/Home'
-import Statistic from './statistic/Statistic'
+import "antd/dist/antd.less";
+import { BrowserRouter, Route } from "react-router-dom";
+import Home from "./home/Home";
+import Statistic from "./statistic/Statistic";
 
 import CrawlerCard from "./component/CrawlerCard";
 import OSInfo from "./component/OSInfo";
@@ -30,9 +30,9 @@ class App extends Component {
         </div>
         <BrowserRouter>
           <div>
-            <Route exact path='/' component={Home}/>
-            <Route path='/home' component={Home}/>
-            <Route path='/statistic' component={Statistic}/>
+            <Route exact path="/" component={Home} />
+            <Route path="/home" component={Home} />
+            <Route path="/statistic" component={Statistic} />
           </div>
         </BrowserRouter>
       </div>

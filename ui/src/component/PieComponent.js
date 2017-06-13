@@ -1,36 +1,36 @@
-import React, {Component} from 'react';
+import React, { Component } from "react";
 
-let echarts = require('echarts');
+let echarts = require("echarts");
 
-class PieComponent extends Component{
-  constructor(props){
-    super(props)
-    this.setComponentOption = this.setComponentOption.bind(this)
+class PieComponent extends Component {
+  constructor(props) {
+    super(props);
+    this.setComponentOption = this.setComponentOption.bind(this);
     this.init = this.init.bind(this);
   }
 
-  setComponentOption(data){
+  setComponentOption(data) {
     return {
-      series : [
+      series: [
         {
-          name: '比例',
-          type: 'pie',
-          radius: ['70%', '90%'],
+          name: "比例",
+          type: "pie",
+          radius: ["70%", "90%"],
           avoidLabelOverlap: true,
           data: data, //传入外部的data数据
           label: {
             normal: {
               show: false,
-              position: 'center',
+              position: "center",
               textStyle: {
-                fontSize: '18'
+                fontSize: "18"
               },
-              formatter: "{d}% \n{b}",
+              formatter: "{d}% \n{b}"
             },
             emphasis: {
               show: true,
               textStyle: {
-                fontSize: '18',
+                fontSize: "18"
               }
             }
           },
@@ -41,33 +41,34 @@ class PieComponent extends Component{
           }
         }
       ]
-    }
+    };
   }
 
-  init(){
-    const { data } = this.props //外部传入的data数据
-    let pieChart = echarts.init(this.refs.main) //初始化echarts
+  init() {
+    const { data } = this.props; //外部传入的data数据
+    let pieChart = echarts.init(this.refs.main); //初始化echarts
 
     //我们要定义一个setPieOption函数将data传入option里面
-    let options = this.setComponentOption(data)
+    let options = this.setComponentOption(data);
     //设置options
-    pieChart.setOption(options)
+    pieChart.setOption(options);
   }
 
-  componentDidMount(){
+  componentDidMount() {
     this.init();
   }
 
-  componentDidUpdate(){
+  componentDidUpdate() {
     this.init();
   }
 
-  render(){
+  render() {
     return (
-      <div ref="main" style={{width: this.props.size.width, height: this.props.size.height}}>
-      
-      </div>
-    )
+      <div
+        ref="main"
+        style={{ width: this.props.size.width, height: this.props.size.height }}
+      />
+    );
   }
 }
 

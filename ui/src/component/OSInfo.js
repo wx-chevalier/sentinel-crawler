@@ -2,7 +2,7 @@
 
 import React, { Component } from "react";
 import PropTypes from "prop-types";
-import "./OSInfo.css";
+import "./OSInfo.scss";
 const echarts = require("echarts");
 
 /**
