@@ -2,18 +2,17 @@
 
 import CrawlerScheduler from "../../src/crawler/CrawlerScheduler";
 import CrawlerServer from "../../src/server/CrawlerServer";
-import BeautyTopicCrawler from "./crawler/BeautyTopicCrawler";
 
 const crawlerScheduler: CrawlerScheduler = new CrawlerScheduler();
 
-let beautyTopicCrawler = new BeautyTopicCrawler();
-
 // 注册
-crawlerScheduler.register(beautyTopicCrawler);
+crawlerScheduler.register();
 
 new CrawlerServer(crawlerScheduler).run().then(
-  () => {},
+  info => {
+    console.log(info);
+  },
   error => {
-    console.log(error);
+    console.error(error);
   }
 );

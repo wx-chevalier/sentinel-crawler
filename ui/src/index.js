@@ -1,13 +1,5 @@
-import React from "react";
-import { Provider } from "mobx-react";
-import stores from "./store/stores";
-import App from "./App";
-import { clientRender } from "../dev-config/tool/render";
+// @flow
 
-clientRender(
-  <Provider {...stores}>
-    <App />
-  </Provider>,
-  document.getElementById("root"),
-  "./App"
-);
+import _DeclarativeCrawlerUI from "./container/DeclarativeCrawlerUI";
+
+export default _DeclarativeCrawlerUI;

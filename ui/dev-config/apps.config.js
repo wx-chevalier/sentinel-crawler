@@ -6,10 +6,9 @@ const defaultIndexPage = "./dev-config/server/template.html";
 module.exports = {
   //基本的应用配置信息
   apps: [
-    //HelloWorld
     {
       id: "index",
-      src: "./src/index.js",
+      src: "./src/client.js",
       indexPage: defaultIndexPage,
       compiled: true
     }
@@ -17,7 +16,7 @@ module.exports = {
 
   //开发入口配置
   devServer: {
-    appEntrySrc: "./src/index.js", //当前待调试的APP的入口文件
+    appEntrySrc: "./src/client.js", //当前待调试的APP的入口文件
     port: 3000 //监听的Server端口
   },
 

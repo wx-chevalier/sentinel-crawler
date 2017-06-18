@@ -3,14 +3,6 @@ import Spider from "../spider/Spider.js";
 import SpiderMessage from "./store/entity/SpiderMessage";
 import { dcEmitter } from "./supervisor";
 
-export type RequestType = {
-  // 请求地址
-  url: string,
-
-  // fetch 使用的配置
-  option: { [string]: any }
-};
-
 export type Transformer = (dataFromPreviousSpider: any) => {};
 
 export type SpiderTask = {
@@ -27,6 +19,9 @@ export type SpiderTask = {
   nextSpiderInstance?: Spider
 };
 
+/**
+ * Description 当前爬虫实例
+ */
 export default class Crawler {
   // 当前类名
   name = this.constructor.name;
@@ -48,7 +43,7 @@ export default class Crawler {
   isRunning: boolean = false;
 
   // 存放内部的所有蜘蛛任务
-  _spiderTasks:[SpiderTask] = [];
+  _spiderTasks: [SpiderTask] = [];
 
   // 标志位，记录当前爬虫是否被初始化
   get _isInitialized(): boolean {
@@ -141,7 +136,10 @@ export default class Crawler {
       let spiderTask = this._spiderTasks.shift();
 
       // 设置爬虫的请求
-      spiderTask.spiderInstance.setRequest(spiderTask.request.url,spiderTask.request.option);
+      spiderTask.spiderInstance.setRequest(
+        spiderTask.request.url,
+        spiderTask.request.option
+      );
 
       let startTime = new Date();
 

@@ -1,6 +1,6 @@
 // @flow
-import HeadlessChromeSpider from "../../../spider/web/HeadlessChromeSpider";
-import {$} from "../../../utils/parser/HTMLParser";
+import { $ } from "../../../src/utils/parser/HTMLParser";
+import HeadlessChromeSpider from "../../../src/spider/web/HeadlessChromeSpider";
 
 /**
  * @function 知乎某个话题答案的爬虫
@@ -24,7 +24,7 @@ export default class TopicSpider extends HeadlessChromeSpider {
     // 存放全部的抓取到的对象
     let feedItems = [];
 
-    for (let {$question, $summary} of pageObject[".feed-item"]) {
+    for (let { $question, $summary } of pageObject[".feed-item"]) {
       feedItems.push({
         questionTitle: $question.text(),
         questionHref: $question.attr("href"),

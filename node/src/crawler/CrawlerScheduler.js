@@ -1,9 +1,8 @@
 // @flow
 
 import Crawler from "./Crawler";
-import { dcEmitter, store } from "./supervisor";
+import { dcEmitter } from "./supervisor";
 import CrawlerMessage from "./store/entity/CrawlerMessage";
-import Store from "./store/Store";
 
 // 爬虫策略项配置
 type ScheduleOptionType = {
@@ -16,6 +15,8 @@ type ScheduleOptionType = {
 export default class CrawlerScheduler {
   // 存放所有爬虫的信息
   crawlers: { [string]: Crawler } = {};
+
+  // 存放爬虫的最后一次运行的信息
 
   /**
    * @function 注册爬虫
@@ -56,7 +57,7 @@ export default class CrawlerScheduler {
     let crawlerNames = Object.keys(this.crawlers);
 
     for (let crawlerName of crawlerNames) {
-      let crawler = this.crawlers[crawlerName];
+      let crawler: Crawler = this.crawlers[crawlerName];
       // 当爬虫尚未运行时运行该爬虫
       if (!crawler.isRunning) {
         // 发出消息提示爬虫已启动
@@ -84,18 +85,18 @@ export default class CrawlerScheduler {
         }
       }
     }
+
+    // 设置定时器，更新爬虫执行安排
+    setInterval(() => {
+      this.scheduleCrawler();
+    }, 1000);
   }
+
+  /**
+   * @function 根据间隔信息判断是否需要重新执行爬虫抓取操作
+   */
+  scheduleCrawler() {}
 }
-
-// 设置定时器，更新爬虫执行安排
-setInterval(() => {
-  updateSchedule(store);
-}, 1000);
-
-/**
- * @function 更新当前 Store 中的爬虫执行信息
- */
-function updateSchedule(store: Store) {}
 
 /**
  * @function 定时执行爬虫

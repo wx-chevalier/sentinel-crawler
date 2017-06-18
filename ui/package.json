@@ -1,13 +1,13 @@
 {
   "name": "declarative-crawler-ui",
-  "version": "0.0.14",
-  "description": "scaffold for creating engineering react project with optional redux, mobx, etc. ",
+  "version": "0.0.1",
+  "description": "declarative-crawler-ui",
   "author": "wxyyxc1992",
   "license": "MIT",
-  "homepage": "https://github.com/wxyyxc1992/create-react-boilerplate",
+  "homepage": "https://github.com/wxyyxc1992/declarative-crawler-ui",
   "repository": {
     "type": "git",
-    "url": "https://github.com/wxyyxc1992/create-react-boilerplate"
+    "url": "https://github.com/wxyyxc1992/declarative-crawler-ui"
   },
   "keywords": [
     "boilerplate",

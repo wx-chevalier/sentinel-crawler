@@ -23,6 +23,18 @@ await fetchListAndContentThenIndex(
 
 ![](https://coding.net/u/hoteam/p/Cache/git/raw/master/2017/3/2/declarative-crawler.q.png)
 
+# Spider 
+
+
+# Crawler
+
 ## 异常处理
 
 对于所有的非受控异常，Let It Crash! 
+
+# CrawlerScheduler
+
+# CrawlerServer
+
+# CrawlerUI
+

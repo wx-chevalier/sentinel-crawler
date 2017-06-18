@@ -9,7 +9,14 @@ const statisticStore = new StatisticStore();
 homeStore.getSpiderList();
 statisticStore.requestStatistic();
 
-export default {
-  homeStore,
-  statisticStore
-};
+/**
+ * Description 获取 Stores 数据
+ * @param crawlerServer
+ * @returns {{homeStore: HomeStore, statisticStore: StatisticStore}}
+ */
+export default function getStores(crawlerServer: string) {
+  return {
+    homeStore,
+    statisticStore
+  };
+}

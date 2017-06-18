@@ -1,6 +1,6 @@
 // @flow
 import { override } from "core-decorators";
-import type { SpiderInterface } from "../Spider";
+import type { SpiderInterface } from "../SpiderInterface";
 import Spider from "../Spider";
 import { execute } from "fluent-fetcher";
 import { $ } from "../../utils/parser/HTMLParser";
@@ -88,7 +88,7 @@ export default class HTMLSpider extends Spider implements SpiderInterface {
           // 遍历所有的二级键
           for (let subKey of Object.keys(model[key])) {
             if (model[key][subKey] === "self") {
-              $elementsObject[subKey] = $element;
+              elementObject[subKey] = $element;
             } else {
               elementObject[subKey] = $dom($element.find(model[key][subKey]));
             }
