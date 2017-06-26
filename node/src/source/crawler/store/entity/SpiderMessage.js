@@ -22,7 +22,7 @@ export default class SpiderMessage {
    * @param content
    * @param instance
    */
-  constructor(type: string, instance: Spider, content: string) {
+  constructor(type: string, instance: Spider, content: string = "") {
     if (!type) {
       throw "必须指定消息类型";
     }
@@ -34,6 +34,8 @@ export default class SpiderMessage {
     content && (this.content = content);
   }
 }
+
+// 蜘蛛生命周期
 
 SpiderMessage.START_FETCH = "开始抓取";
 
@@ -47,4 +49,11 @@ SpiderMessage.START_PERSIST = "开始存储";
 
 SpiderMessage.FINISH_PERSIST = "结束存储";
 
+// 蜘蛛运行时间统计
+
 SpiderMessage.LOG_EXECUTE_DURATION = "执行时间";
+
+// 蜘蛛校验数据统计
+SpiderMessage.VALIDATE_OK = "校验成功";
+
+SpiderMessage.VALIDATE_FAILURE = "校验失败";

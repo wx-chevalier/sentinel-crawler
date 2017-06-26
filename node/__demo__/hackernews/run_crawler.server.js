@@ -1,6 +1,6 @@
 // @flow
 
-import CrawlerScheduler from "../../src/crawler/CrawlerScheduler";
+import CrawlerScheduler from "../../src/source/crawler/CrawlerScheduler";
 import CrawlerServer from "../../src/server/CrawlerServer";
 
 const crawlerScheduler: CrawlerScheduler = new CrawlerScheduler();

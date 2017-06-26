@@ -5,9 +5,7 @@ import SpiderMessage from "./store/entity/SpiderMessage";
 import CrawlerStatistics from "./store/entity/CrawlerStatistics";
 import CrawlerMessage from "./store/entity/CrawlerMessage";
 import Store from "./store/Store";
-import DeclarativeCrawlerEmitter from "./store/DeclarativeCrawlerEmitter";
-
-const dcEmitter = new DeclarativeCrawlerEmitter();
+import dcEmitter from "./store/DeclarativeCrawlerEmitter";
 
 const store = new Store();
 

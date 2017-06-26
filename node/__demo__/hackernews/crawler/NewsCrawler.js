@@ -1,6 +1,6 @@
 // @flow
 
-import Crawler from "../../../src/crawler/Crawler";
+import Crawler from "../../../src/source/crawler/Crawler";
 
 export default class NewsCrawler extends Crawler {
   initialize() {

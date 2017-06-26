@@ -1,8 +1,10 @@
 // @flow
-import SpiderMessage from "../crawler/store/entity/SpiderMessage";
+const chaiExpect = require("chai").expect;
+
 import Crawler from "../crawler/Crawler";
 import { dcEmitter } from "../crawler/supervisor";
 import type { SpiderInterface } from "./SpiderInterface";
+import SpiderMessage from "../crawler/store/entity/SpiderMessage";
 
 type ModelType = {
   [string]: string
@@ -111,6 +113,7 @@ export default class Spider implements SpiderInterface {
    * @returns {Promise.<Array.<Object>>}
    */
   async run(isPersist: boolean = true): Promise<Array<any>> {
+    // 这里使用 crawler 校验仅当 Spider 嵌入到 Crawler 时候才运行
     this.crawler &&
       dcEmitter.emit(
         "Spider",
@@ -181,7 +184,20 @@ export default class Spider implements SpiderInterface {
       );
 
     // 对解析结果进行验证
-    await this.validate(parsedData);
+    try {
+      await this.validate(parsedData, chaiExpect);
+      dcEmitter.emit(
+        "Spider",
+        new SpiderMessage(SpiderMessage.VALIDATE_OK, this)
+      );
+    } catch (e) {
+      console.log(e.message);
+      this.crawler &&
+        dcEmitter.emit(
+          "Spider",
+          new SpiderMessage(SpiderMessage.VALIDATE_FAILURE, this, e.message)
+        );
+    }
 
     if (isPersist) {
       dcEmitter.emit(

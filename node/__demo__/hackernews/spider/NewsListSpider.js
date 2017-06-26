@@ -1,6 +1,6 @@
 // @flow
 
-import HTMLSpider from "../../../src/spider/web/HTMLSpider";
+import HTMLSpider from "../../../src/source/spider/web/HTMLSpider";
 
 /**
  * Description 抓取 Hacker News 新闻列表
@@ -72,7 +72,16 @@ import HTMLSpider from "../../../src/spider/web/HTMLSpider";
 </td>
 </tr>;
  */
-
+/*
+{ id: '14572625',
+  title: 'The Secrets of Silent-Film Footage Found Buried in the Earth',
+  href: 'http://www.newyorker.com/culture/richard-brody/the-secrets-of-silent-film-footage-found-buried-in-the-earth',
+  site: 'newyorker.com',
+  score: '46' },
+*/
+/**
+ * Description Hacker News 的界面爬虫
+ */
 export default class NewsListSpider extends HTMLSpider {
   // 定义模型
   model = {
@@ -109,5 +118,14 @@ export default class NewsListSpider extends HTMLSpider {
     }
 
     return stories;
+  }
+
+  /**
+   * Description 校验检测到的数据是否准确
+   * @param stories
+   * @param chaiExpect
+   */
+  validate(stories: [string], chaiExpect: Function) {
+    chaiExpect(stories, "获取到的 Hacker News 列表数据数目大于 0").to.have.length.above(2);
   }
 }

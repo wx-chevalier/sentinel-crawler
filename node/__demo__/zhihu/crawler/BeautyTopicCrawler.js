@@ -2,7 +2,7 @@
 
 import TopicSpider from "../spider/TopicSpider";
 import AnswerAndPersistImageSpider from "../spider/AnswerAndPersistImageSpider";
-import Crawler from "../../../src/crawler/Crawler";
+import Crawler from "../../../src/source/crawler/Crawler";
 
 export default class BeautyTopicCrawler extends Crawler {
   // 初始化爬虫
@@ -16,7 +16,7 @@ export default class BeautyTopicCrawler extends Crawler {
 
     this.setRequests(requests)
       .setSpider(
-        new TopicSpider().setChromeOption("120.55.83.19", null, 10 * 1000)
+        new TopicSpider().setChromeOption("chrome.truelore.cn", 9222, 10 * 1000)
       )
       .transform(feedItems => {
         if (!Array.isArray(feedItems)) {

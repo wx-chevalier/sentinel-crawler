@@ -1,6 +1,7 @@
 
 # 浅论复杂智能爬虫的挑战与设计
 
+业务透明、执行抽象
 
 
 爬虫是数据抓取的重要手段之一，而以 [Scrapy](https://doc.scrapy.org/en/latest/intro/tutorial.html)、[Crawler4j](https://github.com/yasserg/crawler4j)、[Nutch](http://nutch.apache.org/) 为代表的开源框架能够帮我们快速构建分布式爬虫系统；就笔者浅见，我们在开发大规模爬虫系统时可能会面临以下挑战：

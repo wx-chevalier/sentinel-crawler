@@ -3,14 +3,14 @@ import { override } from "core-decorators";
 import type { SpiderInterface } from "../SpiderInterface";
 import Spider from "../Spider";
 import { execute } from "fluent-fetcher";
-import { $ } from "../../utils/parser/HTMLParser";
+import { $ } from "../../../utils/parser/HTMLParser";
 
 /**
- * @function 简单的基于 HTTP 的爬虫
+ * Description 简单的基于 HTTP 的爬虫
  */
 export default class HTMLSpider extends Spider implements SpiderInterface {
   /**
-   * @function 数据抓取
+   * Description 数据抓取
    * @param url
    * @param option
    * @returns {Promise}
@@ -36,7 +36,7 @@ export default class HTMLSpider extends Spider implements SpiderInterface {
   }
 
   /**
-   * @function 元素提取函数
+   * Description 元素提取函数
    * @param pageHTML
    * @param model
    * @returns {Promise.<{}>}

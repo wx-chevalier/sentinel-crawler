@@ -2,9 +2,9 @@
 
 const Koa = require("koa");
 const Router = require("koa-router");
-import { dcEmitter, store } from "../crawler/supervisor";
-import CrawlerScheduler from "../crawler/CrawlerScheduler";
-import CrawlerStatistics from "../crawler/store/entity/CrawlerStatistics";
+import { dcEmitter, store } from "../source/crawler/supervisor";
+import CrawlerScheduler from "../source/crawler/CrawlerScheduler";
+import CrawlerStatistics from "../source/crawler/store/entity/CrawlerStatistics";
 const pusage = require("pidusage");
 const os = require("os");
 
