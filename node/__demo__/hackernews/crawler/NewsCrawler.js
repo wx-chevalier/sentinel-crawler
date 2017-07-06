@@ -2,6 +2,9 @@
 
 import Crawler from "../../../src/source/crawler/Crawler";
 
+/**
+ * Description 新闻爬虫
+ */
 export default class NewsCrawler extends Crawler {
   initialize() {
     // 构建所有的爬虫

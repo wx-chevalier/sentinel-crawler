@@ -133,13 +133,18 @@ export default class Crawler {
 
     while (this._spiderTasks.length > 0) {
       // 取出某个任务实例
-      let spiderTask = this._spiderTasks.shift();
+      let spiderTask:SpiderTask = this._spiderTasks.shift();
 
       // 设置爬虫的请求
       spiderTask.spiderInstance.setRequest(
         spiderTask.request.url,
         spiderTask.request.option
       );
+
+      // 判断上一次发出的请求中是否附带有额外的 extra 信息
+      if (spiderTask.request.extra) {
+        spiderTask.spiderInstance.setExtra(spiderTask.request.extra);
+      }
 
       let startTime = new Date();
 

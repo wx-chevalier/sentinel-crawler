@@ -3,7 +3,7 @@ import { override } from "core-decorators";
 import type { SpiderInterface } from "../SpiderInterface";
 import Spider from "../Spider";
 import { execute } from "fluent-fetcher";
-import { $ } from "../../../utils/parser/HTMLParser";
+const $ = require("isomorphic-parser");
 
 /**
  * Description 简单的基于 HTTP 的爬虫
@@ -59,12 +59,13 @@ export default class HTMLSpider extends Spider implements SpiderInterface {
         continue;
       }
 
+      // 如果键的起始字符为 $ ，则直接提取
       if (key[0] === "$") {
-        // 如果键的起始字符为 $ ，则直接提取
+        // 判断是否为指向自身的
         if (model[key] === "self") {
           pageObject[key] = $dom;
         } else {
-          pageObject[key] = $dom($dom.find(model[key]));
+          pageObject[key] = $($dom.find(model[key]));
         }
         continue;
       }
@@ -82,7 +83,7 @@ export default class HTMLSpider extends Spider implements SpiderInterface {
 
         // 遍历所有提取到的一级元素
         for (let i = 0; i < elementsLength; i++) {
-          let $element = $dom($elementOrElements[i]);
+          let $element = $($elementOrElements[i]);
           let elementObject = {};
 
           // 遍历所有的二级键
@@ -90,7 +91,8 @@ export default class HTMLSpider extends Spider implements SpiderInterface {
             if (model[key][subKey] === "self") {
               elementObject[subKey] = $element;
             } else {
-              elementObject[subKey] = $dom($element.find(model[key][subKey]));
+              // Todo 这里有可能获取到的仍然是某个数组对象
+              elementObject[subKey] = $($element.find(model[key][subKey]));
             }
           }
 
@@ -106,10 +108,10 @@ export default class HTMLSpider extends Spider implements SpiderInterface {
         // 遍历所有的二级键
         for (let subKey of Object.keys(model[key])) {
           if (model[key][subKey] === "self") {
-            pageObject[key][subKey] = $dom($elementOrElements);
+            pageObject[key][subKey] = $($elementOrElements);
           } else {
-            pageObject[key][subKey] = $dom(
-              $dom($elementOrElements).find(model[key][subKey])
+            pageObject[key][subKey] = $(
+              $($elementOrElements).find(model[key][subKey])
             );
           }
         }
@@ -118,7 +120,7 @@ export default class HTMLSpider extends Spider implements SpiderInterface {
 
     return {
       data: pageObject,
-      $: $dom
+      $
     };
   }
 }

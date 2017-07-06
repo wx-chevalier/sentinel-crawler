@@ -4,7 +4,8 @@ const Koa = require("koa");
 const Router = require("koa-router");
 import { dcEmitter, store } from "../source/crawler/supervisor";
 import CrawlerScheduler from "../source/crawler/CrawlerScheduler";
-import CrawlerStatistics from "../source/crawler/store/entity/CrawlerStatistics";
+import CrawlerStatistics
+  from "../source/crawler/store/entity/CrawlerStatistics";
 const pusage = require("pidusage");
 const os = require("os");
 
@@ -12,6 +13,10 @@ const app = new Koa();
 
 const router = new Router();
 
+/**
+ * Description 获取操作系统信息
+ * @returns {Promise}
+ */
 async function getOSInfo() {
   return new Promise(resolve => {
     pusage.stat(process.pid, function(err, stat) {
@@ -59,9 +64,18 @@ export default class CrawlerServer {
     });
 
     // 启动整个爬虫
-    router.get("/start", (ctx, next) => {
-      // 启动整个爬虫
-      this.crawlerScheduler.run().then();
+    // 这里不需要等待启动返回，因此直接使用 Promise 异步执行
+    router.get("/start/:crawlerName", (ctx, next) => {
+      // 获取到路径参数
+      const { crawlerName } = ctx.params;
+
+      if (crawlerName === "all") {
+        // 启动整个爬虫
+        this.crawlerScheduler.run().then();
+      } else {
+        // 启动指定名爬虫
+        this.crawlerScheduler.run(crawlerName).then();
+      }
 
       // 返回结构
       ctx.body = {
@@ -99,7 +113,18 @@ export default class CrawlerServer {
     app.use(router.routes()).use(router.allowedMethods());
 
     app.listen(this.httpOption.port, this.httpOption.host, () => {
-      console.log("服务端开始运行");
+      const baseUrl = `${this.httpOption.host}:${this.httpOption.port}`;
+
+      console.log(
+        `
+          爬虫服务端开始运行：
+          ${baseUrl}/ - 查看爬虫列表
+          ${baseUrl}/:crawlerName - 查看某个爬虫详情
+          ${baseUrl}/start/all - 启动所有爬虫
+          ${baseUrl}/start/:crawlerName - 启动所有爬虫
+          ${baseUrl}/status - 查看系统状态
+        `
+      );
     });
   }
 }

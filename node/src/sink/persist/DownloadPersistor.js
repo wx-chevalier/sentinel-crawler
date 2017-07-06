@@ -1,5 +1,6 @@
 // @flow
 import Persistor from "./Persistor";
+import { errorLogger } from "../../utils/logger";
 const download = require("image-downloader");
 
 export default class DownloadPersistor extends Persistor {
@@ -20,7 +21,8 @@ export default class DownloadPersistor extends Persistor {
 
       return true;
     } catch (e) {
-      console.error(e);
+      errorLogger.error(e.message);
+
       return false;
     }
   }

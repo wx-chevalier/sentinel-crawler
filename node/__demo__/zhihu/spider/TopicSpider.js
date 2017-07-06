@@ -1,11 +1,12 @@
 // @flow
-import { $ } from "../../../src/utils/parser/HTMLParser";
-import HeadlessChromeSpider from "../../../src/spider/web/HeadlessChromeSpider";
-
+import HeadlessChromeSpider
+  from "../../../src/source/spider/web/HeadlessChromeSpider";
 /**
  * @function 知乎某个话题答案的爬虫
  */
 export default class TopicSpider extends HeadlessChromeSpider {
+  static displayName = "话题蜘蛛";
+
   // 定义模型
   model = {
     ".feed-item": {

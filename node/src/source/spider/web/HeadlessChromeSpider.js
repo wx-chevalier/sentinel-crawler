@@ -1,6 +1,7 @@
 // @flow
 import HTMLSpider from "./HTMLSpider";
 import { override } from "core-decorators";
+import { errorLogger } from "../../../utils/logger";
 const CDP = require("chrome-remote-interface");
 
 /**
@@ -42,7 +43,6 @@ export default class HeadlessChromeSpider extends HTMLSpider {
    * @returns {Promise}
    */
   @override async fetch(url: string, option: Object): Promise<any> {
-
     return new Promise(async (resolve, reject) => {
       // 设置抓取过时，最多 1 分钟
       setTimeout(() => {
@@ -94,7 +94,7 @@ export default class HeadlessChromeSpider extends HTMLSpider {
           });
         }
       ).on("error", err => {
-        console.error(err);
+        errorLogger.error(err.message);
       });
     });
   }

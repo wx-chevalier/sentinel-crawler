@@ -1,12 +1,13 @@
 {
   "presets": [
-    "es2015",
+    "env",
     "stage-0",
     "flow",
     "jest"
   ],
   "plugins": [
     "transform-decorators-legacy",
-    "async-to-promises"
+    "async-to-promises",
+    "transform-runtime"
   ]
 }

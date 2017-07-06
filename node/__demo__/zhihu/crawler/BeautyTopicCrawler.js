@@ -28,9 +28,12 @@ export default class BeautyTopicCrawler extends Crawler {
 
           if (!!href) {
             // 存在有效二级链接
-            return href.indexOf("zhihu.com") > -1
-              ? href
-              : `https://www.zhihu.com${href}`;
+            return {
+              url: href.indexOf("zhihu.com") > -1
+                ? href
+                : `https://www.zhihu.com${href}`,
+              extra: feedItem
+            };
           }
         });
       })

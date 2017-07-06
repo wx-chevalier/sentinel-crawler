@@ -5,6 +5,7 @@ import Crawler from "../crawler/Crawler";
 import { dcEmitter } from "../crawler/supervisor";
 import type { SpiderInterface } from "./SpiderInterface";
 import SpiderMessage from "../crawler/store/entity/SpiderMessage";
+import { errorLogger } from "../../utils/logger";
 
 type ModelType = {
   [string]: string
@@ -72,6 +73,15 @@ export default class Spider implements SpiderInterface {
   }
 
   /**
+   * Description 设置当前蜘蛛的额外信息，额外信息一部分是初始化时候的静态配置，一部分来源于上一个蜘蛛的动态信息
+   * @param extra
+   */
+  setExtra(extra?: any) {
+    extra && (this.extra = Object.assign({}, this.extra, extra));
+    return this;
+  }
+
+  /**
    * @function 数据抓取
    */
   async fetch(url: string, option: Object): Promise<any> {
@@ -131,7 +141,7 @@ export default class Spider implements SpiderInterface {
       rawData = await this.fetch(this.url, this.option);
     } catch (e) {
       // 如果这一步发生异常，则报错
-      console.error(e);
+      errorLogger.error(e.message);
       return;
     }
 
@@ -191,7 +201,8 @@ export default class Spider implements SpiderInterface {
         new SpiderMessage(SpiderMessage.VALIDATE_OK, this)
       );
     } catch (e) {
-      console.log(e.message);
+      errorLogger.error(e.message);
+
       this.crawler &&
         dcEmitter.emit(
           "Spider",

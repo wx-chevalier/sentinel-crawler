@@ -82,6 +82,7 @@ export default class Store {
 
       let crawler: Crawler = crawlerStatistics.instance;
 
+      // 将所有的错误信息编码存放
       crawlerStatusList.push({
         name: crawler.name,
         displayName: crawler.displayName,
@@ -89,7 +90,7 @@ export default class Store {
         lastStartTime: crawlerStatistics.lastStartTime,
         lastFinishTime: crawlerStatistics.lastFinishTime,
         lastError: crawlerStatistics.lastError
-          ? JSON.parse(crawlerStatistics.lastError.message)
+          ? crawlerStatistics.lastError.message
           : undefined
       });
     }

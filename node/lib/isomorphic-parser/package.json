@@ -1,0 +1,16 @@
+{
+  "name": "isomorphic-parser",
+  "version": "0.0.1",
+  "description": "",
+  "main": "index-node.js",
+  "browser": "index-browser.js",
+  "scripts": {
+    "test": ""
+  },
+  "author": "王下邀月熊（384924552@qq.com）",
+  "license": "MIT",
+  "dependencies": {
+    "cheerio": "^0.22.0",
+    "jquery": "^3.2.1"
+  }
+}

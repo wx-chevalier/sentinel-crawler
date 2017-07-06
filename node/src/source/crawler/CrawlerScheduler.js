@@ -53,11 +53,22 @@ export default class CrawlerScheduler {
    * @function 运行整个爬虫系统
    * @returns {Promise.<void>}
    */
-  async run() {
-    let crawlerNames = Object.keys(this.crawlers);
+  async run(crawlerNameToRun: string) {
+    let crawlerNames = Object.keys(
+      this.crawlers
+    ).filter((crawlerName: string) => {
+      // 如果没有设置过滤值，则默认全部运行
+      if (!crawlerNameToRun) {
+        return true;
+      } else {
+        // 否则仅运行指定爬虫
+        return crawlerName === crawlerNameToRun;
+      }
+    });
 
     for (let crawlerName of crawlerNames) {
       let crawler: Crawler = this.crawlers[crawlerName];
+
       // 当爬虫尚未运行时运行该爬虫
       if (!crawler.isRunning) {
         // 发出消息提示爬虫已启动
@@ -66,23 +77,24 @@ export default class CrawlerScheduler {
           new CrawlerMessage(CrawlerMessage.START, crawler)
         );
 
-        try {
-          // 运行单个爬虫
-          await crawler.run();
+        // 异步运行该爬虫
+        crawler.run().then(
+          result => {
+            dcEmitter.emit(
+              "Crawler",
+              new CrawlerMessage(CrawlerMessage.FINISH, crawler)
+            );
+          },
+          error => {
+            // 出现异常之后，重置当前爬虫
+            crawler.reset();
 
-          dcEmitter.emit(
-            "Crawler",
-            new CrawlerMessage(CrawlerMessage.FINISH, crawler)
-          );
-        } catch (error) {
-          // 出现异常之后，重置当前爬虫
-          crawler.reset();
-
-          dcEmitter.emit(
-            "Crawler",
-            new CrawlerMessage(CrawlerMessage.ERROR, crawler, error)
-          );
-        }
+            dcEmitter.emit(
+              "Crawler",
+              new CrawlerMessage(CrawlerMessage.ERROR, crawler, error)
+            );
+          }
+        );
       }
     }
 
