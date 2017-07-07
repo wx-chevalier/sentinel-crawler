@@ -1,16 +1,21 @@
 // @flow
 
 const Koa = require("koa");
+const cors = require('kcors');
 const Router = require("koa-router");
-import { dcEmitter, store } from "../source/crawler/supervisor";
+import { dcEmitter, store } from "../supervisor/singleton";
 import CrawlerScheduler from "../source/crawler/CrawlerScheduler";
 import CrawlerStatistics
-  from "../source/crawler/store/entity/CrawlerStatistics";
+  from "../supervisor/entity/CrawlerStatistics";
 const pusage = require("pidusage");
 const os = require("os");
 
 const app = new Koa();
 
+// 添加 CORS 支持
+app.use(cors());
+
+// 初始化路由设置
 const router = new Router();
 
 /**
@@ -58,6 +63,12 @@ export default class CrawlerServer {
   async run() {
     // 默认路由，返回当前爬虫数目与状态
     router.get("/", function(ctx, next) {
+      ctx.body = {
+        message: "欢迎使用 Declarative Crawler Server！"
+      };
+    });
+
+    router.get("/crawlers", function(ctx, next) {
       // store是DeclarativeCrawlerEmitter监听爬虫时存储的爬虫信息
       // store.crawlers存储字段：name，displayName，isRunning，lastStartTime，lastFinishTime，lastError
       ctx.body = store.crawlers;
@@ -89,7 +100,7 @@ export default class CrawlerServer {
     });
 
     // 根据crawlerName返回爬虫信息
-    router.get("/:crawlerName", function(ctx, next) {
+    router.get("/crawler/:crawlerName", function(ctx, next) {
       // 获取到路径参数
       const { crawlerName } = ctx.params;
 
@@ -103,6 +114,7 @@ export default class CrawlerServer {
       } else {
         // spiders
         ctx.body = {
+          // 剩余的请求数
           leftRequest: crawlerStatistics.instance._spiderTasks.length,
           spiders: crawlerStatistics.spiders
         };
@@ -118,8 +130,9 @@ export default class CrawlerServer {
       console.log(
         `
           爬虫服务端开始运行：
-          ${baseUrl}/ - 查看爬虫列表
-          ${baseUrl}/:crawlerName - 查看某个爬虫详情
+          ${baseUrl}/ - 服务端根入口
+          ${baseUrl}/crawlers - 查看爬虫列表
+          ${baseUrl}/crawler/:crawlerName - 查看某个爬虫详情
           ${baseUrl}/start/all - 启动所有爬虫
           ${baseUrl}/start/:crawlerName - 启动所有爬虫
           ${baseUrl}/status - 查看系统状态

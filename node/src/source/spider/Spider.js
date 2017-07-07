@@ -2,9 +2,9 @@
 const chaiExpect = require("chai").expect;
 
 import Crawler from "../crawler/Crawler";
-import { dcEmitter } from "../crawler/supervisor";
+import { dcEmitter } from "../../supervisor/singleton";
 import type { SpiderInterface } from "./SpiderInterface";
-import SpiderMessage from "../crawler/store/entity/SpiderMessage";
+import SpiderMessage from "../../supervisor/entity/SpiderMessage";
 import { errorLogger } from "../../utils/logger";
 
 type ModelType = {

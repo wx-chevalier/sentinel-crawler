@@ -1,8 +1,8 @@
 // @flow
 
 import Crawler from "./Crawler";
-import { dcEmitter } from "./supervisor";
-import CrawlerMessage from "./store/entity/CrawlerMessage";
+import { dcEmitter } from "../../supervisor/singleton";
+import CrawlerMessage from "../../supervisor/entity/CrawlerMessage";
 
 // 爬虫策略项配置
 type ScheduleOptionType = {
@@ -80,6 +80,7 @@ export default class CrawlerScheduler {
         // 异步运行该爬虫
         crawler.run().then(
           result => {
+            // 触发爬虫运行完毕事件
             dcEmitter.emit(
               "Crawler",
               new CrawlerMessage(CrawlerMessage.FINISH, crawler)
@@ -89,9 +90,10 @@ export default class CrawlerScheduler {
             // 出现异常之后，重置当前爬虫
             crawler.reset();
 
+            // 触发爬虫运行异常数据
             dcEmitter.emit(
               "Crawler",
-              new CrawlerMessage(CrawlerMessage.ERROR, crawler, error)
+              new CrawlerMessage(CrawlerMessage.ERROR, crawler, error.message)
             );
           }
         );

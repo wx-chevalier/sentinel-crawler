@@ -12,7 +12,7 @@ export { default as Crawler } from "./source/crawler/Crawler";
 export { default as CrawlerScheduler } from "./source/crawler/CrawlerScheduler";
 
 // 导出全局唯一值
-export { dcEmitter, store } from "./source/crawler/supervisor";
+export { dcEmitter, store } from "./supervisor/singleton";
 
 // 导出持久化器
 export { default as DownloadPersistor } from "./sink/persist/DownloadPersistor";

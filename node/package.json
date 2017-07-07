@@ -1,6 +1,6 @@
 {
   "name": "declarative-crawler",
-  "version": "0.0.17",
+  "version": "0.0.19",
   "description": "Declarative and Observable Distributed Crawler For Web, RDB, OS, also can act as a Monitor or ETL for your system",
   "scripts": {
     "prepublish": "npm run build",
@@ -32,12 +32,14 @@
     "isomorphic-fetch": "^2.2.1",
     "isomorphic-parser": "^0.0.1",
     "isomorphic-urlencode": "0.0.9",
+    "kcors": "^2.2.1",
     "koa": "^2.3.0",
     "koa-router": "next",
     "md5": "^2.2.1",
     "mysql": "^2.13.0",
     "pidusage": "^1.1.5",
     "qrcode-terminal": "^0.11.0",
+    "swagger-decorator": "^0.0.13",
     "winston": "^2.3.1",
     "wolfy87-eventemitter": "^5.2.1"
   },

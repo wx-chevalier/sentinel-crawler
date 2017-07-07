@@ -164,8 +164,7 @@
     "antd": "^2.9.3",
     "echarts": "^3.6.1",
     "es6-promise": "^4.1.0",
-    "fluent-fetcher": "^0.1.11",
-    "isomorphic-fetch": "^2.2.1",
+    "fluent-fetcher": "^0.3.0",
     "jquery": "^3.2.1",
     "mobx": "^3.1.9",
     "mobx-react": "^4.1.8",
@@ -174,15 +173,10 @@
     "react-dom": "^15.5.4",
     "react-helmet": "^5.0.3",
     "react-loadable": "^3.3.1",
-    "react-redux": "^5.0.4",
     "react-router": "^4.1.1",
     "react-router-dom": "^4.1.1",
     "react-tap-event-plugin": "^2.0.1",
-    "redux": "^3.6.0",
-    "redux-form": "^6.6.3",
-    "redux-promise": "^0.5.3",
-    "redux-thunk": "^2.2.0",
     "styled-components": "^1.4.5",
-    "whatwg-fetch": "^2.0.3"
+    "swagger-decorator": "0.0.14"
   }
 }

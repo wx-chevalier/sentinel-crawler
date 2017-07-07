@@ -1,0 +1,8 @@
+.CrawlerCard__container{
+  .CrawlerCard__title{
+    display: inline-block;
+    max-width: 10em;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+}

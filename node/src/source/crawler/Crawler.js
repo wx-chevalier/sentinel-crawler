@@ -1,7 +1,7 @@
 // @flow
 import Spider from "../spider/Spider.js";
-import SpiderMessage from "./store/entity/SpiderMessage";
-import { dcEmitter } from "./supervisor";
+import SpiderMessage from "../../supervisor/entity/SpiderMessage";
+import { dcEmitter } from "../../supervisor/singleton";
 
 export type Transformer = (dataFromPreviousSpider: any) => {};
 
@@ -45,6 +45,9 @@ export default class Crawler {
   // 存放内部的所有蜘蛛任务
   _spiderTasks: [SpiderTask] = [];
 
+  // 存放内部已经完成的蜘蛛任务数
+  _executedSpiderTaskNum = 0;
+
   // 标志位，记录当前爬虫是否被初始化
   get _isInitialized(): boolean {
     return (
@@ -54,6 +57,9 @@ export default class Crawler {
     );
   }
 
+  /**
+   * Description 由子类负责实现，进行内部请求初始化
+   */
   initialize() {}
 
   /**
@@ -120,6 +126,7 @@ export default class Crawler {
       throw new Error("请至少设置一个爬虫实例与一个请求！");
     }
 
+    // 初始化将请求映射为爬虫的任务
     this._spiderTasks = this.requests.map(request => {
       return {
         spiderInstance: this.spiders[0],
@@ -133,7 +140,7 @@ export default class Crawler {
 
     while (this._spiderTasks.length > 0) {
       // 取出某个任务实例
-      let spiderTask:SpiderTask = this._spiderTasks.shift();
+      let spiderTask: SpiderTask = this._spiderTasks.shift();
 
       // 设置爬虫的请求
       spiderTask.spiderInstance.setRequest(
@@ -150,6 +157,9 @@ export default class Crawler {
 
       // 执行当前任务
       let data = await spiderTask.spiderInstance.run(isPersist);
+
+      // 将内部统计值加一
+      this._executedSpiderTaskNum++;
 
       // 反馈爬虫执行时间信息
       dcEmitter.emit(
@@ -178,6 +188,7 @@ export default class Crawler {
             };
           }
 
+          // 添加新的蜘蛛运行任务
           this._spiderTasks.push({
             spiderInstance: spiderTask.nextSpiderInstance,
             request,
