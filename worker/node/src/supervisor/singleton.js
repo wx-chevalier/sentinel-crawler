@@ -73,6 +73,15 @@ dcEmitter.on("Spider", (spiderMessage: SpiderMessage) => {
       );
       break;
     }
+    case SpiderMessage.VALIDATE_FAILURE: {
+      // 更新校验数据
+      store.pushSpiderValidatedFailure(
+        spiderMessage.instance,
+        spiderMessage.content,
+        spiderMessage.instance.crawler
+      );
+      break;
+    }
     default:
       break;
   }

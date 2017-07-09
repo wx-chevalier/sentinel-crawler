@@ -82,14 +82,14 @@ export default class Spider implements SpiderInterface {
   }
 
   /**
-   * @function 数据抓取
+   * Description 数据抓取
    */
   async fetch(url: string, option: Object): Promise<any> {
     return null;
   }
 
   /**
-   * @function 数据提取之前的预处理
+   * Description 数据提取之前的预处理
    * @param {*} rawData
    */
   before_extract(rawData: any): string {
@@ -108,7 +108,7 @@ export default class Spider implements SpiderInterface {
   }
 
   // 数据验证
-  async validate(parsedData: any): Promise<boolean> {
+  async validate(parsedData: any, expect: Object): Promise<boolean> {
     return true;
   }
 
@@ -142,7 +142,13 @@ export default class Spider implements SpiderInterface {
     } catch (e) {
       // 如果这一步发生异常，则报错
       errorLogger.error(e.message);
-      return;
+
+      // 这里根据运行环境的差异判断是否需要抛出异常，如果是测试环境，则抛出异常
+      if (typeof process !== "undefined" && process.env.NODE_ENV === "test") {
+        throw e;
+      } else {
+        return;
+      }
     }
 
     this.crawler &&
@@ -208,6 +214,11 @@ export default class Spider implements SpiderInterface {
           "Spider",
           new SpiderMessage(SpiderMessage.VALIDATE_FAILURE, this, e.message)
         );
+
+      // 这里根据运行环境的差异判断是否需要抛出异常，如果是测试环境，则抛出异常
+      if (typeof process !== "undefined" && process.env.NODE_ENV === "test") {
+        throw e;
+      }
     }
 
     if (isPersist) {

@@ -1,6 +1,8 @@
 
 # declarative-crawler
 
+控制界面在线预览：http://ui.crawler.ggzy.truelore.cn/，测试用的爬虫服务器：http://server.crawler.ggzy.truelore.cn/ （目前需要手动填入）
+
 declarative-crawler 是遵循声明式、可监测理念的分布式爬虫，其计划提供 Node.js 与 Go 两种实现，能够对于静态 Web 页面、动态 Web 页面、关系型数据库、操作系统等异构多源数据进行抓取。declarative-crawler 希望让使用者专注于领域逻辑而不用考虑调度、监控等问题，并且稍加改造就能用于系统监控、ETL 数据迁移等领域。更多的 declarative-crawler 设计思想、设计规范参考下述文章：
 - [浅论复杂智能爬虫的挑战与设计](./docs/Crawler.md)
 - [declarative-crawler 设计思想与原则](./docs/Design.md)

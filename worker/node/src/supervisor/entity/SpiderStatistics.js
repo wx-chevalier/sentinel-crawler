@@ -17,10 +17,21 @@ export class SpiderStatistics {
   count: number = 0;
 
   // 异常次数统计
+  // 这里的异常表示执行出错的异常，与校验状态无关
   errorCount: number = 0;
 
   // 时序执行次数
   countByTime: { [number]: number } = {};
+
+  // 校验错误统计
+  validatedFailure: [
+    {
+      // 错误提示
+      message: string,
+      // 错误发生时间
+      time: Date
+    }
+  ] = [];
 
   /**
    * @function 默认构造函数

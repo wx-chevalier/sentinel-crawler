@@ -1,5 +1,5 @@
 // @flow
-import {SpiderStatistics} from "../entity/SpiderStatistics";
+import { SpiderStatistics } from "../entity/SpiderStatistics";
 import Crawler from "../../source/crawler/Crawler";
 import Spider from "../../source/spider/Spider";
 import CrawlerStatistics from "../entity/CrawlerStatistics";
@@ -26,12 +26,13 @@ export default class Store {
     // 取出爬虫统计信息
     let crawlerStatistics: CrawlerStatistics = this.crawlerStatisticsMap[
       crawler.name
-      ];
+    ];
 
     if (!crawlerStatistics) {
       return;
     }
 
+    // 获取蜘蛛的对应名
     let key = spider.name;
 
     // 判断是否存在
@@ -52,13 +53,15 @@ export default class Store {
    * @param duration
    * @param crawler
    */
-  updateSpiderExecuteTime = (spider: Spider,
-                             duration: time,
-                             crawler: Crawler) => {
+  updateSpiderExecuteTime = (
+    spider: Spider,
+    duration: time,
+    crawler: Crawler
+  ) => {
     // 获取当前的蜘蛛对象
     let crawlerStatistics: CrawlerStatistics = this.crawlerStatisticsMap[
       crawler.name
-      ];
+    ];
 
     if (!crawlerStatistics) {
       return;
@@ -71,6 +74,33 @@ export default class Store {
   };
 
   /**
+   * Description 添加蜘蛛的校验错误信息
+   * @param spider
+   * @param message
+   * @param crawler
+   */
+  pushSpiderValidatedFailure = (
+    spider: Spider,
+    message: string,
+    crawler: Crawler
+  ) => {
+    // 获取当前的蜘蛛对象
+    let crawlerStatistics: CrawlerStatistics = this.crawlerStatisticsMap[
+      crawler.name
+    ];
+
+    if (!crawlerStatistics) {
+      return;
+    }
+
+    // 追加验证失败的错误信息
+    crawlerStatistics.spiderStatisticsList[spider.name].validatedFailure.push({
+      message,
+      time: new Date()
+    });
+  };
+
+  /**
    * @function 获取所有爬虫信息
    */
   get crawlers() {
@@ -79,7 +109,7 @@ export default class Store {
     for (let crawlerName in this.crawlerStatisticsMap) {
       let crawlerStatistics: CrawlerStatistics = this.crawlerStatisticsMap[
         crawlerName
-        ];
+      ];
 
       let crawler: Crawler = crawlerStatistics.instance;
 

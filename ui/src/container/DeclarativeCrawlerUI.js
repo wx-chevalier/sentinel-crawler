@@ -1,16 +1,16 @@
 // @flow
 
-import React, { Component } from "react";
+import React, {Component} from "react";
 import PropTypes from "prop-types";
 import "antd/dist/antd.less";
-import { HashRouter as Router, Route, Switch } from "react-router-dom";
-import { Provider } from "mobx-react";
+import {HashRouter as Router, Route, Switch} from "react-router-dom";
+import {Provider} from "mobx-react";
 
 import Home from "./home/Home";
 import getStores from "../store/stores";
 import "./DeclarativeCrawlerUI.scss";
 import CrawlerStatistic from "./statistic/CrawlerStatistic";
-
+import {Helmet} from "react-helmet";
 /**
  * Description 主界面入口
  */
@@ -30,9 +30,13 @@ export default class DeclarativeCrawlerUI extends Component {
     return (
       <Provider {...getStores(this.props.crawlerServer)}>
         <div className="App-container">
+          <Helmet>
+            <meta charSet="utf-8"/>
+            <title>Declarative Crawler UI</title>
+          </Helmet>
           <Router>
             <Switch>
-              <Route exact path="/" component={Home} />
+              <Route exact path="/" component={Home}/>
               <Route
                 exact
                 path="/crawler/:crawlerName"

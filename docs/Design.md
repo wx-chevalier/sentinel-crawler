@@ -1,4 +1,4 @@
-# declarative-crawler 设计思想与原则
+# declarative-crawler: 声明式可控爬虫的设计
 
 
 当笔者几年前编写第一个爬虫时，整体思路是典型的命令式编程，即先抓取再解析，最后持久化存储，就如下述代码：
@@ -33,6 +33,9 @@ await fetchListAndContentThenIndex(
 对于所有的非受控异常，Let It Crash! 
 
 # CrawlerScheduler
+
+## 定时任务
+- [cron-parser](https://github.com/harrisiirak/cron-parser): Node.js library for parsing crontab instructions.
 
 # CrawlerServer
 

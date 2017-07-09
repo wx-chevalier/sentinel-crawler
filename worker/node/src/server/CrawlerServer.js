@@ -52,7 +52,7 @@ export default class CrawlerServer {
       host: string,
       port: number
     } = {
-      host: "localhost",
+      host: "0.0.0.0",
       port: 3001
     }
   ) {
