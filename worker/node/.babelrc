@@ -1,13 +1,17 @@
 {
   "presets": [
-    "env",
+    [
+      "env",
+      {
+        "modules":"commonjs"
+      }
+    ],
     "stage-0",
     "flow",
     "jest"
   ],
   "plugins": [
     "transform-decorators-legacy",
-    "async-to-promises",
-    "transform-runtime"
+    "async-to-promises"
   ]
 }

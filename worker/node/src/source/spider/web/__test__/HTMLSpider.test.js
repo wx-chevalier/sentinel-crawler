@@ -3,7 +3,6 @@ import HTMLSpider from '../HTMLSpider';
 
 describe('测试 HTMLSpider 的解析函数', () => {
   test('测试表格解析', async () => {
-
     let spider = new HTMLSpider();
 
     spider.model = {

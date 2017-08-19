@@ -1,46 +1,58 @@
 // @flow
-const chaiExpect = require("chai").expect;
+import type { SpiderInterface } from './SpiderInterface';
 
-import Crawler from "../crawler/Crawler";
-import { dcEmitter } from "../../supervisor/singleton";
-import type { SpiderInterface } from "./SpiderInterface";
-import SpiderMessage from "../../supervisor/entity/SpiderMessage";
-import { errorLogger } from "../../utils/logger";
-
-type ModelType = {
-  [string]: string
-};
+const chaiExpect = require('chai').expect;
+const nanoid = require('nanoid');
 
 /**
- * @function 爬虫类
+ * Description 蜘蛛中心定义类
+ *
+ * *Error Handling* 在生产环境下，蜘蛛应该由爬虫统一调度，因此蜘蛛并不需要在本层进行容错，而应该直接抛出异常
+ *
  */
 export default class Spider implements SpiderInterface {
-  /**
-   * @region 继承方式声明的属性
-   */
+  /** @region 自定义属性 */
+  // 唯一编号
+  uuid: string = nanoid();
+
   // 当前类名
   name: string = this.constructor.name;
 
+  /** @region 继承方式声明的属性 */
   // 组件名
-  displayName: string = "Spider";
+  displayName: string = 'Spider';
 
   // 模型定义
   model: ModelType = {};
 
+  // 蜘蛛依赖图谱
+  dependencies: Array<Spider> = [];
+
+  /** @region 构造函数方式传入的属性 */
   // 通过构造函数传入，额外信息
   extra: any;
 
-  /**
-   * @region 构造函数方式传入的属性
-   */
+  /** @region 允许动态设置的属性 */
   url: string;
 
   option = {};
 
-  /**
-   * @region 手动设置的属性
-   */
-  crawler: Crawler;
+  /** @region 内部状态属性 */
+  /** 爬虫当前状态 */
+  status: SpiderStatus = 'IDLE';
+
+  /** 爬虫的执行时间记录 */
+  elapsedTime: {
+    fetch: number,
+    parse: number,
+    validate: number,
+    persist: number
+  } = {
+    fetch: -1,
+    parse: -1,
+    validate: -1,
+    persist: -1
+  };
 
   // 方法定义
   /**
@@ -60,15 +72,6 @@ export default class Spider implements SpiderInterface {
     url && (this.url = url);
     option && (this.option = option);
 
-    return this;
-  }
-
-  /**
-   * @function 设置当前蜘蛛所属的爬虫
-   * @param crawler
-   */
-  setCrawler(crawler?: Crawler) {
-    crawler && (this.crawler = crawler);
     return this;
   }
 
@@ -108,7 +111,7 @@ export default class Spider implements SpiderInterface {
   }
 
   // 数据验证
-  async validate(parsedData: any, expect: Object): Promise<boolean> {
+  async validate(parsedData: any, expect?: Object): Promise<boolean> {
     return true;
   }
 
@@ -123,45 +126,31 @@ export default class Spider implements SpiderInterface {
    * @returns {Promise.<Array.<Object>>}
    */
   async run(isPersist: boolean = true): Promise<Array<any>> {
-    // 这里使用 crawler 校验仅当 Spider 嵌入到 Crawler 时候才运行
-    this.crawler &&
-      dcEmitter.emit(
-        "Spider",
-        new SpiderMessage(SpiderMessage.START_FETCH, this)
-      );
-
     let rawData: any;
 
-    try {
-      if (!this.url) {
-        throw new Error("请设置有效的 URL");
-      }
+    this.status = 'FETCH';
 
-      // 执行数据抓取
-      rawData = await this.fetch(this.url, this.option);
-    } catch (e) {
-      // 如果这一步发生异常，则报错
-      errorLogger.error(e.message);
+    let checkPoint: number = Date.now();
 
-      // 这里根据运行环境的差异判断是否需要抛出异常，如果是测试环境，则抛出异常
-      if (typeof process !== "undefined" && process.env.NODE_ENV === "test") {
-        throw e;
-      } else {
-        return;
-      }
+    if (!this.url) {
+      throw new Error('请设置有效的 URL');
     }
 
-    this.crawler &&
-      dcEmitter.emit(
-        "Spider",
-        new SpiderMessage(SpiderMessage.FINISH_FETCH, this)
-      );
+    // 执行数据抓取
+    rawData = await this.fetch(this.url, this.option);
+
+    // 由于数据提取是爬虫内部操作，因此此时的状态直接进入了解析
+    this.status = 'PARSE';
+
+    this.elapsedTime.fetch = Date.now() - checkPoint;
+
+    checkPoint = Date.now();
 
     let beforeExtractedRawData = this.before_extract(rawData);
 
     // 避免用户意外 Hook before_extract
     if (!!rawData && !beforeExtractedRawData) {
-      throw new Error("before_extract 应当设置有效返回值！");
+      throw new Error('before_extract 应当设置有效返回值！');
     }
 
     // 从界面中抽取出选定元素
@@ -170,19 +159,13 @@ export default class Spider implements SpiderInterface {
       this.model
     );
 
-    this.crawler &&
-      dcEmitter.emit(
-        "Spider",
-        new SpiderMessage(SpiderMessage.START_PARSE, this)
-      );
-
     let parsedData: any;
 
     // 判断上一步的返回值是对象还是单个数据，这里是特意为 HTMLSpider 预留的功能，方便其返回文档的 DOM 对象到解析函数中
     if (
-      typeof extracedDataOrObject === "object" &&
-      extracedDataOrObject.hasOwnProperty("data") &&
-      extracedDataOrObject.hasOwnProperty("$")
+      typeof extracedDataOrObject === 'object' &&
+      extracedDataOrObject.hasOwnProperty('data') &&
+      extracedDataOrObject.hasOwnProperty('$')
     ) {
       parsedData = await this.parse(
         extracedDataOrObject.data,
@@ -193,49 +176,29 @@ export default class Spider implements SpiderInterface {
       parsedData = await this.parse(extracedDataOrObject);
     }
 
-    this.crawler &&
-      dcEmitter.emit(
-        "Spider",
-        new SpiderMessage(SpiderMessage.FINISH_PARSE, this)
-      );
+    this.status = 'VALIDATE';
+
+    this.elapsedTime.parse = Date.now() - checkPoint;
+
+    checkPoint = Date.now();
 
     // 对解析结果进行验证
-    try {
-      await this.validate(parsedData, chaiExpect);
-      dcEmitter.emit(
-        "Spider",
-        new SpiderMessage(SpiderMessage.VALIDATE_OK, this)
-      );
-    } catch (e) {
-      errorLogger.error(e.message);
+    await this.validate(parsedData, chaiExpect);
 
-      this.crawler &&
-        dcEmitter.emit(
-          "Spider",
-          new SpiderMessage(SpiderMessage.VALIDATE_FAILURE, this, e.message)
-        );
+    this.status = 'PERSIST';
 
-      // 这里根据运行环境的差异判断是否需要抛出异常，如果是测试环境，则抛出异常
-      if (typeof process !== "undefined" && process.env.NODE_ENV === "test") {
-        throw e;
-      }
-    }
+    this.elapsedTime.validate = Date.now() - checkPoint;
+
+    checkPoint = Date.now();
 
     if (isPersist) {
-      dcEmitter.emit(
-        "Spider",
-        new SpiderMessage(SpiderMessage.START_PERSIST, this)
-      );
-
       // 一组执行完毕后进行数据写入
       await this.persist(parsedData);
-
-      this.crawler &&
-        dcEmitter.emit(
-          "Spider",
-          new SpiderMessage(SpiderMessage.FINISH_PERSIST, this)
-        );
     }
+
+    this.status = 'IDLE';
+
+    this.elapsedTime.persist = Date.now() - checkPoint;
 
     return parsedData;
   }

@@ -1,14 +1,13 @@
 // @flow
 
-const Koa = require("koa");
+import CrawlerScheduler from '../source/crawler/CrawlerScheduler';
+import CrawlerReporter from './util/reporter/CrawlerReporter';
+import RuntimeInfoService from './service/RuntimeInfoService';
+import Crawler from '../source/crawler/Crawler';
+
+const Koa = require('koa');
 const cors = require('kcors');
-const Router = require("koa-router");
-import { dcEmitter, store } from "../supervisor/singleton";
-import CrawlerScheduler from "../source/crawler/CrawlerScheduler";
-import CrawlerStatistics
-  from "../supervisor/entity/CrawlerStatistics";
-const pusage = require("pidusage");
-const os = require("os");
+const Router = require('koa-router');
 
 const app = new Koa();
 
@@ -17,21 +16,6 @@ app.use(cors());
 
 // 初始化路由设置
 const router = new Router();
-
-/**
- * Description 获取操作系统信息
- * @returns {Promise}
- */
-async function getOSInfo() {
-  return new Promise(resolve => {
-    pusage.stat(process.pid, function(err, stat) {
-      resolve({
-        cpu: stat.cpu,
-        memory: 1 - stat.memory / os.totalmem()
-      });
-    });
-  });
-}
 
 /**
  * @function 爬虫运行服务器
@@ -52,7 +36,7 @@ export default class CrawlerServer {
       host: string,
       port: number
     } = {
-      host: "0.0.0.0",
+      host: '0.0.0.0',
       port: 3001
     }
   ) {
@@ -62,25 +46,25 @@ export default class CrawlerServer {
 
   async run() {
     // 默认路由，返回当前爬虫数目与状态
-    router.get("/", function(ctx, next) {
+    router.get('/', (ctx, next) => {
       ctx.body = {
-        message: "欢迎使用 Declarative Crawler Server！"
+        message: '欢迎使用 Declarative Crawler Server！'
       };
     });
 
-    router.get("/crawlers", function(ctx, next) {
-      // store是DeclarativeCrawlerEmitter监听爬虫时存储的爬虫信息
-      // store.crawlers存储字段：name，displayName，isRunning，lastStartTime，lastFinishTime，lastError
-      ctx.body = store.crawlers;
+    router.get('/crawlers', (ctx, next) => {
+      ctx.body = CrawlerReporter.getCrawlerListStatistics(
+        this.crawlerScheduler
+      );
     });
 
     // 启动整个爬虫
     // 这里不需要等待启动返回，因此直接使用 Promise 异步执行
-    router.get("/start/:crawlerName", (ctx, next) => {
+    router.get('/start/:crawlerName', (ctx, next) => {
       // 获取到路径参数
       const { crawlerName } = ctx.params;
 
-      if (crawlerName === "all") {
+      if (crawlerName === 'all') {
         // 启动整个爬虫
         this.crawlerScheduler.run().then();
       } else {
@@ -88,35 +72,34 @@ export default class CrawlerServer {
         this.crawlerScheduler.run(crawlerName).then();
       }
 
-      // 返回结构
+      // 返回正常启动信息
       ctx.body = {
-        message: "OK"
+        message: 'OK'
       };
     });
 
     // 返回爬虫目前状态
-    router.get("/status", async (ctx, next) => {
-      ctx.body = await getOSInfo();
+    router.get('/status', async (ctx, next) => {
+      ctx.body = await RuntimeInfoService.getOSInfo();
     });
 
     // 根据crawlerName返回爬虫信息
-    router.get("/crawler/:crawlerName", function(ctx, next) {
+    router.get('/crawler/:crawlerName', (ctx, next) => {
       // 获取到路径参数
       const { crawlerName } = ctx.params;
 
-      let crawlerStatistics: CrawlerStatistics =
-        store.crawlerStatisticsMap[crawlerName];
+      let crawler: Crawler = this.crawlerScheduler.crawlers[crawlerName];
 
-      if (!crawlerStatistics) {
+      if (!crawler) {
         ctx.body = {
-          error: "NOT FOUND"
+          error: 'NOT FOUND'
         };
       } else {
         // spiders
         ctx.body = {
           // 剩余的请求数
-          leftRequest: crawlerStatistics.instance._spiderTasks.length,
-          spiders: crawlerStatistics.spiders
+          waitingSpiderTaskNum: crawler.waitingSpiderTasks.length,
+          spiders: CrawlerReporter.getSpiderListStatisticsByName(crawler)
         };
       }
     });

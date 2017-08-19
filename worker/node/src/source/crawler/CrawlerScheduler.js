@@ -1,8 +1,6 @@
 // @flow
 
-import Crawler from "./Crawler";
-import { dcEmitter } from "../../supervisor/singleton";
-import CrawlerMessage from "../../supervisor/entity/CrawlerMessage";
+import Crawler from './Crawler';
 
 // 爬虫策略项配置
 type ScheduleOptionType = {
@@ -28,18 +26,13 @@ export default class CrawlerScheduler {
 
     // 将爬虫添加到当前队列中
     this.crawlers[crawler.name] = crawler;
-
-    dcEmitter.emit(
-      "Crawler",
-      new CrawlerMessage(CrawlerMessage.REGISTER, crawler)
-    );
   };
 
   /**
    * @function 反注册爬虫
    * @param crawlerOrName
    */
-  deregister = (crawlerOrName: [Crawler | string]) => {
+  unregister = (crawlerOrName: [Crawler | string]) => {
     delete this.crawlers[crawlerOrName];
   };
 
@@ -53,16 +46,20 @@ export default class CrawlerScheduler {
    * @function 运行整个爬虫系统
    * @returns {Promise.<void>}
    */
-  async run(crawlerNameToRun: string) {
+  async run(crawlerNameOrRegex: string) {
     let crawlerNames = Object.keys(
       this.crawlers
     ).filter((crawlerName: string) => {
       // 如果没有设置过滤值，则默认全部运行
-      if (!crawlerNameToRun) {
+      if (!crawlerNameOrRegex) {
         return true;
       } else {
         // 否则仅运行指定爬虫
-        return crawlerName === crawlerNameToRun;
+        if (crawlerNameOrRegex.startsWith('/')) {
+          return new RegExp(crawlerNameOrRegex).test(crawlerName);
+        } else {
+          return crawlerNameOrRegex === crawlerName;
+        }
       }
     });
 
@@ -71,30 +68,15 @@ export default class CrawlerScheduler {
 
       // 当爬虫尚未运行时运行该爬虫
       if (!crawler.isRunning) {
-        // 发出消息提示爬虫已启动
-        dcEmitter.emit(
-          "Crawler",
-          new CrawlerMessage(CrawlerMessage.START, crawler)
-        );
-
         // 异步运行该爬虫
         crawler.run().then(
-          result => {
-            // 触发爬虫运行完毕事件
-            dcEmitter.emit(
-              "Crawler",
-              new CrawlerMessage(CrawlerMessage.FINISH, crawler)
-            );
-          },
+          result => {},
           error => {
             // 出现异常之后，重置当前爬虫
             crawler.reset();
 
-            // 触发爬虫运行异常数据
-            dcEmitter.emit(
-              "Crawler",
-              new CrawlerMessage(CrawlerMessage.ERROR, crawler, error.message)
-            );
+            // 正常的执行流程下不应该在此处报错
+            console.error(error);
           }
         );
       }
@@ -109,19 +91,7 @@ export default class CrawlerScheduler {
   /**
    * @function 根据间隔信息判断是否需要重新执行爬虫抓取操作
    */
-  scheduleCrawler() {}
-}
-
-/**
- * @function 定时执行爬虫
- * @param day
- * @param hour
- * @param minute
- * @param second
- * @returns {function(*, *, *)}
- */
-export function interval(day = 0, hour = 0, minute = 0, second = 0) {
-  return (target, key, descriptor) => {
-    return descriptor;
-  };
+  scheduleCrawler() {
+    // console.log('Schedule Crawlers');
+  }
 }

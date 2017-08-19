@@ -1,8 +1,7 @@
 // @flow
-import {override} from "core-decorators";
-import type {SpiderInterface} from "../SpiderInterface";
-import TextSpider from "./TextSpider";
-const $ = require('isomorphic-parser');
+import { override } from 'core-decorators';
+import TextSpider from './TextSpider';
+const $: Function = require('isomorphic-parser');
 
 /**
  * Description 简单的基于 HTTP 的爬虫
@@ -20,7 +19,7 @@ export default class HTMLSpider extends TextSpider implements SpiderInterface {
     model: ModelType
   ): {
     data: Object,
-    $: Element
+    $: Function
   } {
     let pageObject = {};
 
@@ -61,7 +60,7 @@ export default class HTMLSpider extends TextSpider implements SpiderInterface {
           let elementObject = {};
 
           // 遍历所有的二级键
-          for (let subKey of Object.keys(model[key])) {
+          for (let subKey of Object.keys((model[key]: ModelType))) {
             if (model[key][subKey] === 'self') {
               elementObject[subKey] = $element;
             } else {

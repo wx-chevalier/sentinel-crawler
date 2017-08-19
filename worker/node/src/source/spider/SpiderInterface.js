@@ -1,6 +1,6 @@
-/**
- * @function 蜘蛛接口定义
- */
+// @flow
+
+/** 蜘蛛接口定义 */
 export interface SpiderInterface {
   // 爬虫展示名
   displayName: string,
