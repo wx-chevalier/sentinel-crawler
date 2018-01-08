@@ -15,25 +15,12 @@ declarative-crawler 希望让使用者专注于领域逻辑而不用考虑调度
 - [基于 Node.js 的声明式可监控爬虫网络初探](https://zhuanlan.zhihu.com/p/26463840)：本文是最早的设计思想与用例概述，其中使用的部分用例已经废弃，可以阅读了解下笔者的原始设计思想。
 - [使用 declarative-crawler 爬取知乎美图](https://zhuanlan.zhihu.com/p/26691789)
 
+# About
 
-# Usage
+## Acknowledge
 
-## 爬取单页面的 Spider
+## Roadmap
 
-## 调度多个 Spider 的 Crawler
+Next MileStone: 0.3
 
-## 调度多个 Crawler 的 CrawlerScheduler
-
-## 使用 CrawlerServer 以服务端方式运行爬虫网络
-
-## 使用 CrawlerUI 可视化监控爬虫运行状态
-
-# Spider 类型介绍
-
-## Spider 定义
-
-## Web Spider
-
-## OS Spider
-
-## DB Spider
+## Contributor
