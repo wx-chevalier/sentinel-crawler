@@ -3,13 +3,29 @@
 
 [[projects]]
   name = "github.com/astaxie/beego"
-  packages = [".","config","context","context/param","grace","logs","session","toolbox","utils"]
+  packages = [
+    ".",
+    "config",
+    "context",
+    "context/param",
+    "grace",
+    "logs",
+    "session",
+    "toolbox",
+    "utils"
+  ]
   revision = "cab8458c1c4a5a3b4bf5192922be620e6dede15b"
   version = "v1.8.3"
+
+[[projects]]
+  name = "github.com/urfave/cli"
+  packages = ["."]
+  revision = "cfb38830724cc34fedffe9a2a29fb54fa9169cd1"
+  version = "v1.20.0"
 
 [solve-meta]
   analyzer-name = "dep"
   analyzer-version = 1
-  inputs-digest = "cf66eb8db09ae865eb18003938476c695d7956401f9ae46384f9b2a202a5f5d8"
+  inputs-digest = "d5deb7cadaf90eaae3d19dafe5f6480a01c144d6ed6c1545b4b4421afef1cfbb"
   solver-name = "gps-cdcl"
   solver-version = 1
