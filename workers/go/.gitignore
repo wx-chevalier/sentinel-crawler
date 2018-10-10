@@ -1,0 +1,4 @@
+# 定义 Go 项目需要忽略的文件
+
+vendor/
+.vscode/

@@ -16,17 +16,43 @@ declarative-crawler 希望让使用者专注于领域逻辑而不用考虑调度
 - [基于 Node.js 的声明式可监控爬虫网络初探](https://zhuanlan.zhihu.com/p/26463840)：本文是最早的设计思想与用例概述，其中使用的部分用例已经废弃，可以阅读了解下笔者的原始设计思想。
 - [使用 declarative-crawler 爬取知乎美图](https://zhuanlan.zhihu.com/p/26691789)
 
-# Features
+# Nutshell
+
+## Features
 
 - Framework
 - Standalone Deployment
 - Master-Slave Deployment
+
+## Components
+
+- Request, 请求描述
+
+- Fetcher, 请求执行器
+
+- Spider, 单页面抓取与解析
+
+- Crawler, 多页面抓取与解析
+
+- Supervisor, 监控者
+
+- Worker
+
+- Scheduler, Master-Slave 架构
 
 # About
 
 ## Credits
 
 - [annie](https://github.com/iawia002/annie): A fast, simple and clean video downloader
+
+### Golang
+
+- [2015-go_spider #Project#](https://github.com/hu17889/go_spider): An awesome Go concurrent Crawler(spider) framework. The crawler is flexible and modular. It can be expanded to an Individualized crawler easily or you can use the default crawl components only.
+
+- [2018-Muffet #Project#](https://github.com/raviqqe/muffet): Muffet is a website link checker which scrapes and inspects all pages in a website recursively.
+
+* [2018-ferret #Project#](https://github.com/MontFerret/ferret): ferret is a web scraping system aiming to simplify data extraction from the web for such things like UI testing, machine learning and analytics.
 
 ## Roadmap
 
