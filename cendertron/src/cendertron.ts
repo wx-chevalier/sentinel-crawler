@@ -165,15 +165,16 @@ export class Cendertron {
     if (!this.renderer) {
       throw new Error('No renderer initalized yet.');
     }
+    let finalUrl = url;
 
+    // 如果是受限的地址，譬如 IP，则添加 HTTP 协议头
     if (this.restricted(url)) {
-      ctx.status = 403;
-      return;
+      finalUrl = `http://${url}`;
     }
 
     try {
       ctx.set('x-renderer', 'cendertron');
-      ctx.body = this.crawlerScheduler!.addUrl(url);
+      ctx.body = this.crawlerScheduler!.addUrl(finalUrl);
     } catch (e) {
       logger.error(`>>>scrape>>>${e.message}`);
       ctx.body = e.message;
