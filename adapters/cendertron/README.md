@@ -33,7 +33,7 @@ $ docker run -it -p 3000:3000 --security-opt seccomp=$HOME/chrome.json --name ce
 $ docker run -it -p 3000:3000 --cap-add=SYS_ADMIN --name cendertron-instance cendertron
 
 # use network and mapping logs
-$ docker run -it -p 5000:3000 -cap-add=SYS_ADMIN --name cendertron-instance --network cncs-network cendertron
+$ docker run -d -p 5000:3000 --cap-add=SYS_ADMIN --name cendertron-instance --network wsat-network cendertron
 ```
 
 ## Test Urls
