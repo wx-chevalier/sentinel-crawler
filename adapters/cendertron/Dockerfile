@@ -7,7 +7,7 @@ LABEL name="cendertron" \
     description="Extract(vulnerable) apis from your Web 2.0 page"
 
 ENV PUPPETEER_SKIP_CHROMIUM_DOWNLOAD=true
-ENV NODE_ENV=development
+ENV NODE_ENV=production
 
 USER root
 

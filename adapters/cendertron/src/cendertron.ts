@@ -54,8 +54,8 @@ export class Cendertron {
 
     this.app.use(
       route.get('/', async (ctx: Koa.Context) => {
-        await koaSend(ctx, 'index.html', {
-          root: path.resolve(__dirname, '../src')
+        await koaSend(ctx, 'public/index.html', {
+          root: path.resolve(__dirname, '../src/public')
         });
       })
     );

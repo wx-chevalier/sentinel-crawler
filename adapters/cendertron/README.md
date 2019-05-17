@@ -6,7 +6,7 @@ Crawl AJAX-heavy client-side Single Page Applications (SPAs), deploying with doc
 
 Cendertron can be used for extracting requests(page urls, apis, etc.) from your Web 2.0 page, view in [demo](http://47.99.50.115:5000/) page, or [result](http://47.99.50.115:5000/apis/http://testphp.vulnweb.com/AJAX/) page.
 
-# Usage
+# Deploy
 
 - Run locally
 
@@ -42,13 +42,31 @@ $ docker run -d -p 5000:3000 --cap-add=SYS_ADMIN --name cendertron-instance --ne
 - http://demo.aisec.cn/demo/
 - https://jsonplaceholder.typicode.com/
 
+# Use as Libs
+
+Install cendertron from NPM:
+
+```sh
+# set not downloading chromium
+$ PUPPETEER_SKIP_CHROMIUM_DOWNLOAD=true
+
+$ yarn add cendertron
+# or
+$ npm install cendertron -S
+```
+
+Import `Crawler` and use in your code:
+
+```js
+```
+
 # About
 
 ## Roadmap
 
-- 将自定义参数的爬虫全部划归到 POST 中，POST 请求会进行 Body 存储与匹配
+- [x] 将自定义参数的爬虫全部划归到 POST 中，POST 请求会进行 Body 存储与匹配
 - [x] 引入自定义的 BrowserEventEmitter，全局仅注册单个 Browser 监听器
-- add https://github.com/winstonjs/winston as logger
+- [x] add https://github.com/winstonjs/winston as logger
 - https://123.125.98.210/essframe
 - [ ] 分别添加调度器级别与爬虫级别的监控
 

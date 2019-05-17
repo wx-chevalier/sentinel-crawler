@@ -1,5 +1,7 @@
+*.tgz
+.vscode
+
 node_modules/
 build/
-test.jpeg
-*.tgz
+dist/
 logs/

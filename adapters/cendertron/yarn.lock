@@ -186,10 +186,6 @@
   dependencies:
     winston "*"
 
-"@webcomponents/webcomponentsjs@^1.2.6":
-  version "1.3.0"
-  resolved "http://registry.npm.taobao.org/@webcomponents/webcomponentsjs/download/@webcomponents/webcomponentsjs-1.3.0.tgz#57983165d8651e742bdd14c2718f8cc6c228496e"
-
 accepts@^1.3.5:
   version "1.3.5"
   resolved "http://registry.npm.taobao.org/accepts/download/accepts-1.3.5.tgz#eb777df6011723a3b14e8a72c0805c8e86746bd2"
