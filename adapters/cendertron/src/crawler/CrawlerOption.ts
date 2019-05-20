@@ -1,4 +1,5 @@
 import Crawler from './Crawler';
+import { CrawlerCache } from './CrawlerCache';
 
 /** 爬虫参数 */
 export interface CrawlerOption {
@@ -6,6 +7,8 @@ export interface CrawlerOption {
   depth: number;
   // 爬虫的唯一编号
   uuid?: string;
+  // 爬虫缓存
+  crawlerCache?: CrawlerCache;
   // 爬虫执行完成之后的回调
   onFinish?: (crawler: Crawler) => void;
 

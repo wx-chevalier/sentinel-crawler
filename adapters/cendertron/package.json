@@ -1,13 +1,13 @@
 {
   "name": "cendertron",
-  "version": "0.0.2",
+  "version": "0.0.4",
   "description": "Renders webpages using headless Chrome for usage by bots",
   "license": "Apache-2.0",
   "repository": "https://github.com/wxyyxc1992/Chaos-Scanner/blob/master/crawlers/cendertron/README.md",
   "engines": {
     "node": ">=7"
   },
-  "main": "dist/index.js",
+  "main": "dist/cjs/index.js",
   "types": "dist/types/index.d.ts",
   "bin": "bin/cendertron",
   "scripts": {
@@ -61,6 +61,7 @@
   },
   "files": [
     "dist/",
-    "build/"
+    "build/",
+    "bin"
   ]
 }

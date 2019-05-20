@@ -8,7 +8,12 @@ import { CrawlerResult, SpiderResult, ParsedUrl } from './types';
 import { isMedia } from '../shared/validator';
 import { parseUrl } from '../shared/transformer';
 import { hashUrl } from '../shared/model';
-import { crawlerCache } from './CrawlerCache';
+import { CrawlerCache } from './CrawlerCache';
+
+export interface CrawlerCallback {
+  onStart: () => void;
+  onFinish: () => void;
+}
 
 /** 爬虫定义 */
 export default class Crawler {
@@ -16,6 +21,7 @@ export default class Crawler {
   parsedEntryUrl: ParsedUrl | null = null;
 
   browser: puppeteer.Browser;
+  crawlerCache?: CrawlerCache;
   crawlerOption: CrawlerOption;
 
   // 内部所有的蜘蛛列表
@@ -46,8 +52,12 @@ export default class Crawler {
     this.existedSpidersHash.add(hashUrl({ url: entryUrl }));
 
     // 判断是否存在缓存
-    if (crawlerCache.queryCrawler(entryUrl) && this.crawlerOption.useCache) {
-      return crawlerCache.queryCrawler(entryUrl);
+    if (
+      this.crawlerCache &&
+      this.crawlerCache.queryCrawler(entryUrl) &&
+      this.crawlerOption.useCache
+    ) {
+      return this.crawlerCache.queryCrawler(entryUrl);
     }
 
     this.initMonitor();
@@ -65,10 +75,12 @@ export default class Crawler {
 
     this.next();
 
-    // 这里会立刻返回结果，Koa 会自动缓存，等待爬虫执行完毕之后，其会自动地去复写缓存
-    crawlerCache.cacheCrawler(this.entryUrl, {
-      isFinished: false
-    });
+    if (this.crawlerCache) {
+      // 这里会立刻返回结果，Koa 会自动缓存，等待爬虫执行完毕之后，其会自动地去复写缓存
+      this.crawlerCache.cacheCrawler(this.entryUrl, {
+        isFinished: false
+      });
+    }
 
     logger.info(`${new Date()} -- Start crawling ${entryUrl}`);
 
@@ -198,16 +210,18 @@ export default class Crawler {
     // 标记为已关闭，不再执行其他程序
     this.isClosed = true;
 
-    // 缓存爬虫结果
-    crawlerCache.cacheCrawler(this.entryUrl, {
-      isFinished: true,
-      metrics: {
-        executionDuration: Date.now() - this.startTime,
-        spiderCount: this.spiders.length,
-        depth: this.crawlerOption.depth
-      },
-      spiderMap: this.spidersRequestMap
-    });
+    if (this.crawlerCache) {
+      // 缓存爬虫结果
+      this.crawlerCache.cacheCrawler(this.entryUrl, {
+        isFinished: true,
+        metrics: {
+          executionDuration: Date.now() - this.startTime,
+          spiderCount: this.spiders.length,
+          depth: this.crawlerOption.depth
+        },
+        spiderMap: this.spidersRequestMap
+      });
+    }
 
     // 清理所有的蜘蛛队列，清理所有的蜘蛛
     this.spiderQueue = [];
