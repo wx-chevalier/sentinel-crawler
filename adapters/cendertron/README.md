@@ -42,7 +42,7 @@ $ docker run -d -p 5000:3000 --cap-add=SYS_ADMIN --name cendertron-instance --ne
 - http://demo.aisec.cn/demo/
 - https://jsonplaceholder.typicode.com/
 
-# Use as Libs
+# Use in FC
 
 Install cendertron from NPM:
 
@@ -58,7 +58,21 @@ $ npm install cendertron -S
 Import `Crawler` and use in your code:
 
 ```js
+const crawler = new Crawler(browser, {
+  onFinish: () => {
+    callback(crawler.spidersRequestMap);
+  }
+});
+
+let pageUrl =
+  evtStr.length !== 0 && evtStr.indexOf('{') !== 0
+    ? evtStr
+    : 'https://www.aliyun.com';
+
+crawler.start(pageUrl);
 ```
+
+If you want to use it in Alibaba Function Computing Service, [cendertron-fc](./deploy/fc) provides simple template.
 
 # About
 
