@@ -20,7 +20,7 @@ xe-crawler 是遵循声明式、可监测理念的分布式爬虫，其计划提
 
 # About
 
-## Credits
+## Motivation & Credits
 
 - [annie](https://github.com/iawia002/annie): A fast, simple and clean video downloader
 
