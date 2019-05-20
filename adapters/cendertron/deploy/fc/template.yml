@@ -19,5 +19,5 @@ Resources:
         EnvironmentVariables:
           CHROME_BUCKET: cncs-archives
           CHROME_REGION: oss-cn-beijing
-          CHROME_ACCESS_KEY_ID: LTAIcf3JwV5j5Kd5
-          CHROME_ACCESS_KEY_SECRET: i0X3WjWeyBFMo58HkYoIcvevsGWy6Z
+          CHROME_ACCESS_KEY_ID: xx
+          CHROME_ACCESS_KEY_SECRET: xxx
