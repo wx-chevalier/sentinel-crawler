@@ -8,7 +8,7 @@ import { CrawlerResult, SpiderResult, ParsedUrl } from './types';
 import { isMedia } from '../shared/validator';
 import { parseUrl } from '../shared/transformer';
 import { hashUrl } from '../shared/model';
-import { CrawlerCache } from './CrawlerCache';
+import { CrawlerCache, crawlerCache } from './CrawlerCache';
 
 export interface CrawlerCallback {
   onStart: () => void;
@@ -21,7 +21,7 @@ export default class Crawler {
   parsedEntryUrl: ParsedUrl | null = null;
 
   browser: puppeteer.Browser;
-  crawlerCache?: CrawlerCache;
+  crawlerCache?: CrawlerCache = crawlerCache;
   crawlerOption: CrawlerOption;
 
   // 内部所有的蜘蛛列表
@@ -155,18 +155,6 @@ export default class Crawler {
       return;
     }
 
-    // 过滤 JS/CSS 等代码资源
-    if (request.url.indexOf('.js') > -1 || request.url.indexOf('.css') > -1) {
-      return;
-    }
-
-    // 判断是否需要过滤图片
-    if (this.crawlerOption.isIgnoreAssets) {
-      if (isMedia(request.url)) {
-        return;
-      }
-    }
-
     // 判断是否需要过滤非同域请求
     if (this.crawlerOption.isSameOrigin) {
       if (request.parsedUrl.host !== this.parsedEntryUrl!.host) {
@@ -180,6 +168,17 @@ export default class Crawler {
     }
 
     this.spidersRequestMap[spider.pageUrl]!.push(request);
+
+    // 判断是否需要过滤图片，JS/CSS 等代码资源
+    if (this.crawlerOption.isIgnoreAssets) {
+      if (
+        isMedia(request.url) ||
+        request.url.indexOf('.js') > -1 ||
+        request.url.indexOf('.css') > -1
+      ) {
+        return;
+      }
+    }
 
     // 判断是否需要创建新的蜘蛛
     if (

@@ -46,7 +46,7 @@ export const defaultCrawlerOption: CrawlerOption = {
   pageTimeout: 30 * 1000,
 
   isSameOrigin: true,
-  isIgnoreAssets: true,
+  isIgnoreAssets: false,
   isMobile: false,
   useCache: true,
 

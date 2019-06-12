@@ -47,7 +47,6 @@ export async function interceptRequestsInSinglePage(
     // 屏蔽所有的图片
     if (isMedia(interceptedRequest.url())) {
       interceptedRequest.abort();
-      return;
     } else if (
       interceptedRequest.isNavigationRequest() &&
       interceptedRequest.redirectChain().length !== 0
