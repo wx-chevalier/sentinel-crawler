@@ -1,0 +1,13 @@
+<component name="libraryTable">
+  <library name="flow" type="javaScript">
+    <properties>
+      <sourceFilesUrls>
+        <item url="file://$PROJECT_DIR$/flow" />
+      </sourceFilesUrls>
+    </properties>
+    <CLASSES>
+      <root url="file://$PROJECT_DIR$/flow" />
+    </CLASSES>
+    <SOURCES />
+  </library>
+</component>
