@@ -2919,9 +2919,9 @@ nan@^2.3.0:
   version "2.6.2"
   resolved "http://registry.npm.taobao.org/nan/download/nan-2.6.2.tgz#e4ff34e6c95fdfb5aecc08de6596f43605a7db45"
 
-nanoid@^0.2.0:
-  version "0.2.0"
-  resolved "http://registry.npm.taobao.org/nanoid/download/nanoid-0.2.0.tgz#ee6f261ad53b2f44e7820105df35a2a985bab405"
+nanoid@^3.1.31:
+  version "3.1.31"
+  resolved "https://registry.yarnpkg.com/nanoid/-/nanoid-3.1.31.tgz#f5b58a1ce1b7604da5f0605757840598d8974dc6"
 
 natural-compare@^1.4.0:
   version "1.4.0"
